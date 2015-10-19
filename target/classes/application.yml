@@ -1,3 +1,8 @@
 security:
   user:
     password: password
+wro:
+  preProcessors: cssUrlRewriting,cssImport,semicolonAppender,lessCss
+  postProcessors: cssVariables,cssMinJawr,jsMin
+  resourceWatcherUpdatePeriod: 0
+  ignoreMissingResources: false
