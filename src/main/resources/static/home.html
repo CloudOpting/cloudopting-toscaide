@@ -6,3 +6,6 @@
 <div  ng-show="!authenticated">
 	<p>Login to see your greeting</p>
 </div>
+<div id="content" ng-controller="CytoscapeCtrl">
+<cytoscape cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+</div>

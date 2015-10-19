@@ -1,6 +1,35 @@
 security:
   user:
     password: password
+cloudopting.security.rememberme.key: e092330a3cdcf60699bf5128db337ead7e18f363
+
+spring:
+    profiles:
+        active: dev
+
+    datasource:
+        dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
+        driver: org.postgresql.Driver
+        url: jdbc:postgresql://cloudopting1.cloudapp.net/cloudopting
+        databaseName: cloudopting
+        serverName: cloudopting1.cloudapp.net
+        username: postgres
+        password: 1qaz2wsx
+
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+        database: POSTGRESQL
+        openInView: false
+        show_sql: true
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+    
 wro:
   preProcessors: cssUrlRewriting,cssImport,semicolonAppender,lessCss
   postProcessors: cssVariables,cssMinJawr,jsMin

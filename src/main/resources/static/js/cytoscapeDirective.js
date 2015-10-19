@@ -1,4 +1,4 @@
-angular.module('cytoscapeSample').directive('cytoscape', function($rootScope) {
+angular.module('hello').directive('cytoscape', function($rootScope) {
     // graph visualisation by - https://github.com/cytoscape/cytoscape.js
     return {
         restrict: 'E',

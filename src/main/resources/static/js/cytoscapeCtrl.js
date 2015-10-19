@@ -1,4 +1,4 @@
-angular.module('cytoscapeSample').controller('CytoscapeCtrl',function($scope, $rootScope){
+angular.module('hello').controller('CytoscapeCtrl',function($scope, $rootScope){
     // container objects
     $scope.mapData = [];
     $scope.edgeData = [];
