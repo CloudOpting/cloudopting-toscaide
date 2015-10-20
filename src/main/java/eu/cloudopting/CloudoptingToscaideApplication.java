@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,12 +35,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
+import eu.cloudopting.tosca.ToscaService;
+
 @SpringBootApplication
 @RestController
 @ComponentScan
 @EnableAutoConfiguration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class CloudoptingToscaideApplication {
+	
+	@Autowired
+	ToscaService toscaService;
 
     public static void main(String[] args) {
         SpringApplication.run(CloudoptingToscaideApplication.class, args);
@@ -98,5 +104,11 @@ public class CloudoptingToscaideApplication {
 	@ResponseBody
 	public Map<String,String> token(HttpSession session) {
 		return Collections.singletonMap("token", session.getId());
+	}
+	
+	@RequestMapping("/xml")
+	public Principal xml(Principal user) {
+		toscaService.testIxinclude();
+		return user;
 	}
 }

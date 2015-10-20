@@ -1,17 +1,23 @@
 package eu.cloudopting.tosca;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.swing.text.AbstractDocument.Content;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xalan.extensions.XPathFunctionResolverImpl;
 import org.apache.xerces.dom.DocumentImpl;
@@ -29,8 +35,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import eu.cloudopting.exception.ToscaException;
 import eu.cloudopting.tosca.utils.CustomizationUtils;
@@ -66,13 +74,84 @@ public class ToscaService {
 		this.xpath.setXPathFunctionResolver(new XPathFunctionResolverImpl());
 		DocumentBuilderFactoryImpl dbf = new DocumentBuilderFactoryImpl();
 		dbf.setNamespaceAware(true);
+		dbf.setXIncludeAware( true );
+        
+
 
 		try {
 			this.db = (DocumentBuilderImpl) dbf.newDocumentBuilder();
+			db.setErrorHandler(new ErrorHandlerImpl());
 		} catch (ParserConfigurationException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+	}
+	
+	public void testIxinclude(){
+		FilenameFilter filter = new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		        return name.endsWith(".xml");
+		    }
+		};
+
+		File folder = new File(".");
+		File[] listOfFiles = folder.listFiles(filter);
+
+		String fullXml = "<Nodes>";
+		for (int i = 0; i < listOfFiles.length; i++) {
+		    File file = listOfFiles[i];
+		    String content = null;
+		    try {
+				content = FileUtils.readFileToString(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    log.debug(content);
+		    fullXml.concat(content);
+		    // do something with the file
+		}
+		fullXml.concat("</Nodes>");
+		/*
+		String xml = null;
+		try {
+			xml = new String(Files.readAllBytes(Paths.get("master.xml")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		InputSource source = new InputSource(new StringReader(xml));
+		DocumentImpl document = null;
+		try {
+			document = (DocumentImpl) this.db.parse(source);
+			log.debug("xml: "+xml);
+			log.debug(document.toString());
+//			this.xdocHash.put(customizationId, document);
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		DTMNodeList nodes = null;
+		try {
+			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType",
+					document, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.debug(nodes.toString());
+		for (int i = 0; i < nodes.getLength(); ++i) {
+			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
+			log.debug(nodes.item(i).getChildNodes().item(1).getTextContent());
+		}
+		*/
+		
+		
 	}
 
 	/**
@@ -749,4 +828,35 @@ public class ToscaService {
 		return customizationUtils.getCustomizationFormData(idApp, csarPath);
 	
 	}
+	
+    static class ErrorHandlerImpl implements ErrorHandler {
+        
+        /**
+         *
+         * @param sAXParseException
+         * @throws SAXException
+         */
+        public void error(SAXParseException sAXParseException) throws SAXException {
+            System.out.println(sAXParseException);
+        }
+        
+        /**
+         *
+         * @param sAXParseException
+         * @throws SAXException
+         */
+        public void fatalError(SAXParseException sAXParseException) throws SAXException {
+            System.out.println(sAXParseException);
+        }
+        
+        /**
+         *
+         * @param sAXParseException
+         * @throws SAXException
+         */
+        public void warning(org.xml.sax.SAXParseException sAXParseException) throws org.xml.sax.SAXException {
+            System.out.println(sAXParseException);
+        }
+        
+    }
 }
