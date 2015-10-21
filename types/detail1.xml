@@ -1,4 +1,4 @@
-<NodeType name="GIOPPOLUCATYPE">
+<NodeType name="GIOPPOLUCATYPE" shape="rectangle" color="#992222">
 	<DerivedFrom typeRef="xs:QName" />
 	<PropertiesDefinition element="QName" type="QName" />
 	<RequirementDefinitions>

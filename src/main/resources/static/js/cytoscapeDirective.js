@@ -14,6 +14,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
         },
         link: function(scope, element, attrs, fn) {
             // dictionary of colors by types. Just to show some design options
+        	/*
             scope.typeColors = {
                 'ellipse':'#992222',
                 'triangle':'#222299',
