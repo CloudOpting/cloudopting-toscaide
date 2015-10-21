@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes"
+	xmlns="http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes"
+	elementFormDefault="qualified">
+
+
+	<xs:complexType name="tDockerContainerProperties">
+		<xs:sequence>
+			<xs:element name="from" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the Docker
+						image to use to build the container
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="entrypoint" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the Docker
+						image to use to build the container
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cmd" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the Docker
+						image to use to build the container
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DockerImage" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name of the Docker
+						image to use to build the container
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="DockerContainerProperties" type="tDockerContainerProperties" />
+	<xs:complexType name="tSLA">
+		<xs:sequence>
+			<xs:element default="1" name="NumCpus">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Number of CPUs: Number
+						of CPUs for the virtual machine
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:enumeration value="1" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="4" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Memory" type="xs:int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Memory (in MB): Amount
+						of memory for the virtual machine
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Price" type="xs:int">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Price for this SLA
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Disk">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Disk (in GB): Amount
+						of
+						disk for the virtual machine
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:enumeration value="5" />
+						<xs:enumeration value="10" />
+						<xs:enumeration value="15" />
+						<xs:enumeration value="20" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Chosen" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">If the SLA is chosen
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" use="required" />
+		<xs:attribute name="id" type="xs:ID" use="required" />
+	</xs:complexType>
+	<xs:complexType name="tSLAs">
+		<xs:sequence>
+			<xs:element name="SLA" minOccurs="1" maxOccurs="unbounded"
+				type="tSLA" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="tVMports">
+		<xs:sequence>
+			<xs:element name="VMport" minOccurs="0" maxOccurs="unbounded"
+				type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="tVMhostProperties">
+		<xs:sequence>
+			<xs:element minOccurs="1" name="SLAsProperties" type="tSLAs" />
+			<xs:element name="vmImage" type="xs:string">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The image used to
+						create the VM in the cloud
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="1" name="VMports" type="tVMports" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="VMhostProperties" type="tVMhostProperties" />
+
+	<xs:complexType name="tCustomizationProperty">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" minOccurs="1" />
+			<xs:element name="Value" type="xs:string" minOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:element name="CustomizationProperty" type="tCustomizationProperty" />
+	<xs:complexType name="tDockerPortProperty">
+		<xs:attribute name="Port" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:element name="DockerPortProperty" type="tDockerPortProperty" />
+	<xs:complexType name="tDockerVolumeProperty">
+		<xs:attribute name="Src" type="xs:string" use="required" />
+		<xs:attribute name="Dest" type="xs:string" use="optional" />
+	</xs:complexType>
+	<xs:element name="DockerVolumeProperty" type="tDockerVolumeProperty" />
+
+
+
+</xs:schema>
