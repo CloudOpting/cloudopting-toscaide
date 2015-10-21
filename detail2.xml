@@ -1,3 +1,26 @@
-<NodeType>
-	<Property>real property</Property>
+<?xml version="1.0" encoding="UTF-8"?>
+<NodeType name="GIOPPOLUCATYPE">
+	<DerivedFrom typeRef="xs:QName" />
+	<PropertiesDefinition element="QName" type="QName" />
+	<RequirementDefinitions>
+		<RequirementDefinition name="xs:string"
+			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
+			<Constraints>
+				<Constraint constraintType="xs:anyURI">
+					constraint type specific content
+				</Constraint>
+			</Constraints>
+		</RequirementDefinition>
+	</RequirementDefinitions>
+	<Interfaces>
+		<Interface name="ProjectInterface">
+			<Operation name="CreateProject">
+				<InputParameters>
+					<InputParameter name="ProjectName" type="xs:string" />
+					<InputParameter name="Owner" type="xs:string" />
+					<InputParameter name="AccountID" type="xs:string" />
+				</InputParameters>
+			</Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
