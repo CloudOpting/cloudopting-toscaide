@@ -122,10 +122,10 @@
 
 	<xs:complexType name="tCustomizationProperty">
 		<xs:sequence>
-			<xs:element name="Name" type="xs:string" minOccurs="1" />
+			<xs:element name="Name1" type="xs:string" minOccurs="1" />
 			<xs:element name="Value" type="xs:string" minOccurs="1" />
 		</xs:sequence>
-		<xs:attribute name="Name" type="xs:string" use="required" />
+		<xs:attribute name="Name2" type="xs:string" use="required" />
 	</xs:complexType>
 	<xs:element name="CustomizationProperty" type="tCustomizationProperty" />
 	<xs:complexType name="tDockerPortProperty">
