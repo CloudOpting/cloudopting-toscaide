@@ -94,7 +94,7 @@ public class ToscaService {
 		    }
 		};
 
-		File folder = new File(".");
+		File folder = new File("types");
 		File[] listOfFiles = folder.listFiles(filter);
 
 		String fullXml = "<Nodes>";
@@ -107,11 +107,12 @@ public class ToscaService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    log.debug(content);
-		    fullXml.concat(content);
+//		    log.debug(content);
+		    fullXml = fullXml.concat(content);
 		    // do something with the file
 		}
-		fullXml.concat("</Nodes>");
+		fullXml = fullXml.concat("</Nodes>");
+		log.debug("xml: "+fullXml);
 		/*
 		String xml = null;
 		try {
@@ -120,12 +121,12 @@ public class ToscaService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		InputSource source = new InputSource(new StringReader(xml));
+		*/
+		InputSource source = new InputSource(new StringReader(fullXml));
 		DocumentImpl document = null;
 		try {
 			document = (DocumentImpl) this.db.parse(source);
-			log.debug("xml: "+xml);
+			log.debug("xml: "+fullXml);
 			log.debug(document.toString());
 //			this.xdocHash.put(customizationId, document);
 		} catch (SAXException e1) {
@@ -145,11 +146,18 @@ public class ToscaService {
 			e.printStackTrace();
 		}
 		log.debug(nodes.toString());
+		ArrayList<String> values = new ArrayList<String>();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
-			log.debug(nodes.item(i).getChildNodes().item(1).getTextContent());
+			log.debug(nodes.item(i).getAttributes().getNamedItem("name")
+					.getNodeValue());
+			values.add(nodes.item(i).getAttributes().getNamedItem("name")
+					.getNodeValue());
+			// recover the name and place into an array
+			
+			// recover the property and read the xsd than generate a xml and with that generate the proper json
 		}
-		*/
+		
 		
 		
 	}

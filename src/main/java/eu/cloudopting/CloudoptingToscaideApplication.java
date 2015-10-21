@@ -58,7 +58,7 @@ public class CloudoptingToscaideApplication {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.httpBasic().and().logout().and().authorizeRequests()
-					.antMatchers("/index.html", "/home.html", "/login.html", "/","/api/*").permitAll().anyRequest()
+					.antMatchers("/index.html", "/home.html", "/login.html", "/","/api/*","/xml").permitAll().anyRequest()
 					.authenticated().and().csrf()
 					.csrfTokenRepository(csrfTokenRepository()).and()
 					.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
