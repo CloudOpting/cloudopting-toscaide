@@ -1,6 +1,6 @@
-<NodeType name="GIOPPOLUCATYPE" shape="rectangle" color="#992222">
+<NodeType name="VMHost" shape="rectangle" color="#992222">
 	<DerivedFrom typeRef="xs:QName" />
-	<PropertiesDefinition element="QName" type="QName" />
+	<PropertiesDefinition element="VMHostProperties" type="tVMHostProperties" />
 	<RequirementDefinitions>
 		<RequirementDefinition name="xs:string"
 			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">

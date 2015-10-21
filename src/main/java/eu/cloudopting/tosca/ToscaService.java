@@ -57,6 +57,8 @@ public class ToscaService {
 	private DocumentBuilderImpl db;
 
 	private HashMap<String, DocumentImpl> xdocHash = new HashMap<String, DocumentImpl>();
+	
+	private ArrayList<String> nodeTypeList;
 
 	@Autowired
 	private ToscaUtils toscaUtils;
@@ -75,6 +77,7 @@ public class ToscaService {
 		DocumentBuilderFactoryImpl dbf = new DocumentBuilderFactoryImpl();
 		dbf.setNamespaceAware(true);
 		dbf.setXIncludeAware( true );
+		dbf.setIgnoringElementContentWhitespace(true);
         
 
 
@@ -87,7 +90,7 @@ public class ToscaService {
 		}
 	}
 	
-	public void testIxinclude(){
+	public void prepareNodeTypes(){
 		FilenameFilter filter = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
 		        return name.endsWith(".xml");
@@ -146,15 +149,28 @@ public class ToscaService {
 			e.printStackTrace();
 		}
 		log.debug(nodes.toString());
-		ArrayList<String> values = new ArrayList<String>();
+		this.nodeTypeList = new ArrayList<String>();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
 			log.debug(nodes.item(i).getAttributes().getNamedItem("name")
 					.getNodeValue());
-			values.add(nodes.item(i).getAttributes().getNamedItem("name")
-					.getNodeValue());
 			// recover the name and place into an array
-			
+			this.nodeTypeList.add(nodes.item(i).getAttributes().getNamedItem("name")
+					.getNodeValue());
+			String color = nodes.item(i).getAttributes().getNamedItem("color")
+					.getNodeValue();
+			String shape = nodes.item(i).getAttributes().getNamedItem("shape")
+					.getNodeValue();
+			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
+				log.debug(nodes.item(i).getChildNodes().item(j).getNodeName());
+				if (nodes.item(i).getChildNodes().item(j).getNodeName().equals("PropertiesDefinition")){
+					log.debug("matched PropertiesDefinition");
+					String element = nodes.item(i).getChildNodes().item(j).getAttributes().getNamedItem("element").getNodeValue();
+					String xsdType = nodes.item(i).getChildNodes().item(j).getAttributes().getNamedItem("type").getNodeValue();
+					log.debug(element);
+					log.debug(xsdType);
+				}
+			}
 			// recover the property and read the xsd than generate a xml and with that generate the proper json
 		}
 		

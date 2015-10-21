@@ -108,7 +108,7 @@ public class CloudoptingToscaideApplication {
 	
 	@RequestMapping("/xml")
 	public Principal xml(Principal user) {
-		toscaService.testIxinclude();
+		toscaService.prepareNodeTypes();
 		return user;
 	}
 }
