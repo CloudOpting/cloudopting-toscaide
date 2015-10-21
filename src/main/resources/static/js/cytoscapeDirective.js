@@ -1,4 +1,4 @@
-angular.module('hello').directive('cytoscape', function($rootScope) {
+angular.module('hello').directive('cytoscape', function($rootScope,$http) {
     // graph visualisation by - https://github.com/cytoscape/cytoscape.js
     return {
         restrict: 'E',
@@ -8,6 +8,7 @@ angular.module('hello').directive('cytoscape', function($rootScope) {
             // data objects to be passed as an attributes - for nodes and edges
             cyData: '=',
             cyEdges: '=',
+            cyTemplates: '=',
             // controller function to be triggered when clicking on a node
             cyClick:'&'
         },
@@ -24,13 +25,22 @@ angular.module('hello').directive('cytoscape', function($rootScope) {
                 'octagon':'#335577',
                 'star':'#113355'
             };
-			
+			/*
 			scope.typeElements = {
 				'container': {'shape':'rectangle','color':'#992222','props':{'cpu':'2'}},
 				'application': {'shape':'pentagon','color':'#990088','props':{'cpu':'2'}},
 				'application-container': {'shape':'hexagon','color':'#118844','props':{'cpu':'2'}},
 				'host': {'shape':'roundrectangle','color':'#772244','props':{'cpu':'2'}}			
 			}
+			$http.get('/api/nodes').then(function data(response,scope){
+				console.debug('called api in directive');
+				console.debug(response);
+				scope.typeElements = response.data;
+				console.debug($scope.typeElements);
+				scope.doCy();
+				
+			})
+			*/
 
             // graph  build
             scope.doCy = function(){ // will be triggered on an event broadcast
@@ -72,11 +82,13 @@ angular.module('hello').directive('cytoscape', function($rootScope) {
                     var Oname = scope.cyData[i].name;
 //                    var Otype = scope.cyData[i].type;
 					var Otype = scope.cyData[i].type;
-					var Oshape = scope.typeElements[Otype].shape;
-					var Oprops = scope.typeElements[Otype].props;
+					var Oshape = scope.cyTemplates[Otype].shape;
+					var Oprops = scope.cyTemplates[Otype].props;
+//					var Oshape = scope.typeElements[Otype].shape;
+//					var Oprops = scope.typeElements[Otype].props;
                     // get color from the object-color dictionary
 //                    var typeColor = scope.typeColors[Otype];
-					var typeColor = scope.typeElements[Otype].color;
+					var typeColor = scope.cyTemplates[Otype].color;
                     // build the object, add or change properties as you need - just have a name and id
                     var elementObj = {
                         group:Otype,'data':{

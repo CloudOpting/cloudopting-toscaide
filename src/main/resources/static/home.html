@@ -4,7 +4,7 @@
 	<p>The content is {{greeting.content}}</p>
 </div>
 <div  ng-show="!authenticated">
-	<p>Login to see your greeting</p>
+	<p>Login to see your greeting!</p>
 </div>
 <div id="content" ng-controller="CytoscapeCtrl">
 <button ng-click="reset()">Reset nodes</button>
@@ -29,5 +29,5 @@
             <button ng-click="addEdge()">Add edge</button>
               </span>
           <hr>
-<cytoscape cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+<cytoscape cy-data="mapData" cy-edges="edgeData" cy-templates="templateData" cy-click="doClick(value)"></cytoscape>
 </div>

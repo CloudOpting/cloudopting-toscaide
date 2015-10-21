@@ -1,10 +1,20 @@
-angular.module('hello').controller('CytoscapeCtrl',function($scope, $rootScope){
+angular.module('hello').controller('CytoscapeCtrl',function($scope, $rootScope, $http){
     // container objects
     $scope.mapData = [];
     $scope.edgeData = [];
     // data types/groups object - used Cytoscape's shapes just to make it more clear
 //    $scope.objTypes = ['ellipse','triangle','rectangle','roundrectangle','pentagon','octagon','hexagon','heptagon','star'];
 	$scope.objTypes = ['container','application','host','application-container'];
+	
+	$http.get('/api/nodes').then(function data(response){
+		console.debug('called api');
+		console.debug(response);
+		$scope.templateData = response.data;
+		console.debug($scope.templateData);
+		$rootScope.$broadcast('appChanged');
+		
+	})
+	
 
     // add object from the form then broadcast event which triggers the directive redrawing of the chart
     // you can pass values and add them without redrawing the entire chart, but this is the simplest way
