@@ -110,7 +110,7 @@ public class ToscaService {
 		prepareNodeTypes();
 	}
 
-	public void readXsd(String element) {
+	public String readXsd(String element) {
 		// String PATH_TO_XSD = null;
 		log.debug("in read xsd");
 		File file = new File("types/nodeTypes.xsd");
@@ -118,6 +118,7 @@ public class ToscaService {
 		log.debug(xsModel.toString());
 		final XSInstance xsInstance = new XSInstance();
 		xsInstance.generateOptionalElements = Boolean.TRUE; // null means random
+//		final QName rootElement = new QName(null, element);
 		final QName rootElement = new QName("http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes", element);
 		log.debug(rootElement.toString());
 		XMLDocument sampleXml;
@@ -128,14 +129,14 @@ public class ToscaService {
 			xsInstance.generate(xsModel, rootElement, sampleXml);
 			log.debug(sampleXml.toString());
 			log.debug(writer.toString());
-			return;
+			return writer.toString();
 		} catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return;
+			return null;
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			return;
+			return null;
 		}
 
 		/*
@@ -252,7 +253,7 @@ public class ToscaService {
 			this.nodeTypeList.add(nodeName);
 			String color = nodes.item(i).getAttributes().getNamedItem("color").getNodeValue();
 			String shape = nodes.item(i).getAttributes().getNamedItem("shape").getNodeValue();
-//			JSONObject jret = new JSONObject();
+			// JSONObject jret = new JSONObject();
 			JSONObject data = new JSONObject();
 			JSONObject props = new JSONObject();
 			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
@@ -265,34 +266,68 @@ public class ToscaService {
 							.getNodeValue();
 					log.debug(element);
 					log.debug(xsdType);
-					readXsd(element);
+					String xmlModel = readXsd(element);
+					props = createFormObject(element, xmlModel);
 				}
 			}
 			try {
-				props.put("cpu", 2);
-				props.put("ram", 3);
+				// props.put("cpu", 2);
+				// props.put("ram", 3);
 				data.put("shape", shape);
 				data.put("color", color);
 				data.put("props", props);
-//				jret.put(nodeName, data);
+				// jret.put(nodeName, data);
 				log.debug(data.toString());
 				this.nodeJsonList.put(nodeName, data);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			// recover the property and read the xsd than generate a xml and
 			// with that generate the proper json
 		}
 
 	}
-	
-	public ArrayList<String> getNodeTypeList(){
+
+	private JSONObject createFormObject(String element, String doc) {
+		JSONObject template = null;
+		try {
+			InputSource source = new InputSource(new StringReader(doc));
+			DocumentImpl document = (DocumentImpl) this.db.parse(source);
+			DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("//*/*", document, XPathConstants.NODESET);
+			JSONObject props = new JSONObject();
+			for (int i = 0; i < nodes.getLength(); ++i) {
+				String name = nodes.item(i).getNodeName();
+				log.debug(name);
+				
+				String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
+				log.debug(title);
+				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
+				log.debug(formtype);
+				JSONObject form = new JSONObject();
+				
+				form.put("title", title);
+				form.put("type", formtype);
+				props.put(name, form);
+				
+			}
+
+			template = new JSONObject("{\"type\":\"object\",\"title\":\"" + element + " properties\"}");
+			template.put("properties", props);
+		} catch (JSONException | SAXException | IOException | XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return template;
+	}
+
+	public ArrayList<String> getNodeTypeList() {
 		return this.nodeTypeList;
 	}
-	
-	public JSONObject getNodeTypeJsonList(){
+
+	public JSONObject getNodeTypeJsonList() {
 		return this.nodeJsonList;
 	}
 
