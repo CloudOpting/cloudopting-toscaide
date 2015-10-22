@@ -1,20 +1,27 @@
 package eu.cloudopting.web.rest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import eu.cloudopting.tosca.ToscaService;
+
 @RestController
 @RequestMapping("/api")
 public class CytoscapeController {
 	private final Logger log = LoggerFactory.getLogger(CytoscapeController.class);
+	
+	@Autowired
+	ToscaService toscaService;
 
-	@RequestMapping(value = "/nodes", method = RequestMethod.GET)
+	@RequestMapping(value = "/nodes1", method = RequestMethod.GET)
 	@ResponseBody
 	public String getNodes() {
 		log.debug("in getNodes");
@@ -38,5 +45,20 @@ public class CytoscapeController {
 		return ret;
 
 	}
+	
+	@RequestMapping(value = "/nodes", method = RequestMethod.GET)
+	@ResponseBody
+	public String getNodesList() {
+		JSONArray ret = new JSONArray(toscaService.getNodeTypeList());
+		log.debug(ret.toString());
+		return ret.toString();
+	}
 
+	@RequestMapping(value = "/nodeTypes", method = RequestMethod.GET)
+	@ResponseBody
+	public String getNodesJsonList() {
+		String ret = toscaService.getNodeTypeJsonList().toString();
+		log.debug(ret);
+		return ret;
+	}
 }

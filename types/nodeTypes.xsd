@@ -5,35 +5,41 @@
 	elementFormDefault="qualified">
 
 
+	<xs:complexType name="formData">
+		<xs:attribute name="label"></xs:attribute>
+	</xs:complexType>
+
 	<xs:complexType name="tDockerContainerProperties">
 		<xs:sequence>
-			<xs:element name="from" type="xs:string">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">The name of the Docker
-						image to use to build the container
-					</xs:documentation>
-				</xs:annotation>
+			<xs:element name="from">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Base image"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
 			</xs:element>
-			<xs:element name="entrypoint" type="xs:string">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">The name of the Docker
-						image to use to build the container
-					</xs:documentation>
-				</xs:annotation>
+			<xs:element name="entrypoint">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Entrypoint in the Dockerfile"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
 			</xs:element>
-			<xs:element name="cmd" type="xs:string">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">The name of the Docker
-						image to use to build the container
-					</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="DockerImage" type="xs:string">
-				<xs:annotation>
-					<xs:documentation xml:lang="en">The name of the Docker
-						image to use to build the container
-					</xs:documentation>
-				</xs:annotation>
+			<xs:element name="cmd">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Command in the Dockerfile"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
@@ -122,7 +128,8 @@
 
 	<xs:complexType name="tCustomizationProperty">
 		<xs:sequence>
-			<xs:element name="Name1" type="xs:string" minOccurs="1" />
+			<xs:element name="Name1" type="xs:string" minOccurs="1"
+				fixed="pippo" />
 			<xs:element name="Value" type="xs:string" minOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="Name2" type="xs:string" use="required" />

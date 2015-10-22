@@ -46,6 +46,8 @@ import org.eclipse.persistence.jaxb.dynamic.DynamicJAXBContextFactory;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +81,7 @@ public class ToscaService {
 	private HashMap<String, DocumentImpl> xdocHash = new HashMap<String, DocumentImpl>();
 
 	private ArrayList<String> nodeTypeList;
+	private JSONObject nodeJsonList;
 
 	@Autowired
 	private ToscaUtils toscaUtils;
@@ -104,6 +107,7 @@ public class ToscaService {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+		prepareNodeTypes();
 	}
 
 	public void readXsd(String element) {
@@ -239,13 +243,18 @@ public class ToscaService {
 		}
 		log.debug(nodes.toString());
 		this.nodeTypeList = new ArrayList<String>();
+		this.nodeJsonList = new JSONObject();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
-			log.debug(nodes.item(i).getAttributes().getNamedItem("name").getNodeValue());
+			String nodeName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
+			log.debug(nodeName);
 			// recover the name and place into an array
-			this.nodeTypeList.add(nodes.item(i).getAttributes().getNamedItem("name").getNodeValue());
+			this.nodeTypeList.add(nodeName);
 			String color = nodes.item(i).getAttributes().getNamedItem("color").getNodeValue();
 			String shape = nodes.item(i).getAttributes().getNamedItem("shape").getNodeValue();
+//			JSONObject jret = new JSONObject();
+			JSONObject data = new JSONObject();
+			JSONObject props = new JSONObject();
 			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
 				log.debug(nodes.item(i).getChildNodes().item(j).getNodeName());
 				if (nodes.item(i).getChildNodes().item(j).getNodeName().equals("PropertiesDefinition")) {
@@ -259,10 +268,32 @@ public class ToscaService {
 					readXsd(element);
 				}
 			}
+			try {
+				props.put("cpu", 2);
+				props.put("ram", 3);
+				data.put("shape", shape);
+				data.put("color", color);
+				data.put("props", props);
+//				jret.put(nodeName, data);
+				log.debug(data.toString());
+				this.nodeJsonList.put(nodeName, data);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			// recover the property and read the xsd than generate a xml and
 			// with that generate the proper json
 		}
 
+	}
+	
+	public ArrayList<String> getNodeTypeList(){
+		return this.nodeTypeList;
+	}
+	
+	public JSONObject getNodeTypeJsonList(){
+		return this.nodeJsonList;
 	}
 
 	/**

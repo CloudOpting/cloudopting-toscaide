@@ -1,6 +1,6 @@
-<NodeType name="GIOPPOLUCATYPE" shape="pentagon" color="#118844">
-	<DerivedFrom typeRef="xs:QName" />
-	<PropertiesDefinition element="CustomizationProperty" type="tCustomizationProperty" />
+<NodeType name="DockerContainer" shape="pentagon" color="#118844">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="DockerContainerProperties" type="tDockerContainerProperties" />
 	<RequirementDefinitions>
 		<RequirementDefinition name="xs:string"
 			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
