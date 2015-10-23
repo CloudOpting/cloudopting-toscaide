@@ -158,9 +158,9 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                         // with sample calling to the controller function as passed as an attribute
                         cy.on('tap', 'node', function(e){
                             var evtTarget = e.cyTarget;
-//                            var nodeId = evtTarget.id();
+                            var nodeId = evtTarget.id();
 							var nodeProps = evtTarget.data('properties');
-                            scope.cyClick({value:nodeProps});
+                            scope.cyClick({value:{id:nodeId,props:nodeProps}});
                         });
 
                         // load the objects array

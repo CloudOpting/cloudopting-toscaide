@@ -3,42 +3,47 @@
 	<p>The ID is {{greeting.id}}</p>
 	<p>The content is {{greeting.content}}</p>
 </div>
-<div  ng-show="!authenticated">
+<div ng-show="!authenticated">
 	<p>Login to see your greeting!</p>
 </div>
-<div id="content" ng-controller="CytoscapeCtrl">
-<button ng-click="reset()">Reset nodes</button>
-            ||||
-           Node
-          <select ng-model="form.obj.objTypes" ng-options="name for name in objTypes"></select>
-          <input ng-model="form.obj.name"/><button ng-click="addObj()">Add node</button>
+<div class="col-md-12" ng-controller="CytoscapeCtrl">
+	<div class="panel panel-default">
+		<div class="row outer">
+			<div id="content" class="col-md-6">
+				<button ng-click="reset()">Reset nodes</button>
+				|||| Node <select ng-model="scheda.obj.objTypes"
+					ng-options="name for name in objTypes"></select> <input
+					ng-model="scheda.obj.name" />
+				<button ng-click="addObj()">Add node</button>
 
-          &nbsp&nbsp&nbsp&nbsp&nbsp
+				&nbsp&nbsp&nbsp&nbsp&nbsp <span ng-hide="mapData.length>1">
+					After adding 2 nodes, you can start adding connecting edges </span> <span
+					ng-show="mapData.length>1"> Edge (between 2 nodes) <select
+					ng-model="formEdges.fromName" ng-options="c.name for c in mapData">
+						<option value="">From >></option>
+				</select> <select ng-model="formEdges.toName"
+					ng-options="c.name for c in mapData">
+						<option value="">To >></option>
+				</select>
+					<button ng-click="addEdge()">Add edge</button>
+				</span>
+				<hr>
 
-          <span ng-hide="mapData.length>1">
-              After adding 2 nodes, you can start adding connecting edges
-          </span>
-          <span ng-show="mapData.length>1">
-        Edge (between 2 nodes)
-          <select ng-model="formEdges.fromName" ng-options="c.name for c in mapData">
-              <option value=""> From >> </option>
-          </select>
-          <select ng-model="formEdges.toName" ng-options="c.name for c in mapData">
-              <option value="">  To >> </option>
-          </select>
-            <button ng-click="addEdge()">Add edge</button>
-              </span>
-          <hr>
-<cytoscape cy-data="mapData" cy-edges="edgeData" cy-templates="templateData" cy-click="doClick(value)"></cytoscape>
-            <div >
-                <span >Form</span>
+				<cytoscape cy-data="mapData" cy-edges="edgeData"
+					cy-templates="templateData" cy-click="doClick(value)"></cytoscape>
+			</div>
+			<div class="col-md-6">
+				<div>
+					<span>Form</span>
 
-                <form name="myForm"
-                      sf-schema="typeschema"
-                      sf-form="typeform"
-                      sf-model="typemodel"
-                      ng-submit="onSubmit(myForm)"></form>
+					<form name="myForm" sf-schema="schema" sf-form="form"
+						sf-model="model" ng-submit="onSubmit(myForm)"></form>
+				</div>
 
-            </div>
+				<button ng-click="sendService()">Send nodes</button>
+
+			</div>
+		</div>
+	</div>
 
 </div>

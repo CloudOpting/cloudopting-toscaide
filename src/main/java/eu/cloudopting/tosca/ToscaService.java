@@ -306,6 +306,15 @@ public class ToscaService {
 				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
 				log.debug(formtype);
 				JSONObject form = new JSONObject();
+				switch (formtype) {
+				case "select":
+					String titleMap = nodes.item(i).getAttributes().getNamedItem("titleMap").getNodeValue();
+					form.put("titleMap", new JSONArray(titleMap));
+					break;
+
+				default:
+					break;
+				}
 				
 				form.put("title", title);
 				form.put("type", formtype);

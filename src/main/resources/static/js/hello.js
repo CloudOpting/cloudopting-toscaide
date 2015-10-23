@@ -103,7 +103,35 @@ angular
 					// $scope.objTypes =
 					// ['ellipse','triangle','rectangle','roundrectangle','pentagon','octagon','hexagon','heptagon','star'];
 	//				$scope.objTypes = [ 'container', 'application', 'host',	'application-container' ];
+					$scope.form = [ "*", {
+						type : "submit",
+						title : "Save"
+					} ];
 
+					$scopemodel = {};
+
+					$scope.schema = {
+				            type: "object",
+				            properties: {
+				                name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
+				                title: {
+				                    type: "string",
+				                    enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+				                }
+				            }
+				        };
+					
+					$scope.schema = { 
+							type: "object", 
+							title: "DockerContainerProperties properties", 
+							properties: {
+								entrypoint:{title:"Entry1point in the Dockerfile",type:"string"},
+								from:{title:"Base image1",type:"string"},
+								cmd:{title:"Command in th1e Dockerfile",type:"string"}
+							}
+ 						};
+
+					
 					$http.get('/api/nodes').then(function data(response) {
 						console.debug('called api');
 						console.debug(response);
@@ -129,14 +157,16 @@ angular
 					// chart, but this is the simplest way
 					$scope.addObj = function() {
 						// collecting data from the form
-						var newObj = $scope.form.obj.name;
-						var newObjType = $scope.form.obj.objTypes;
+//						var newObj = $scope.form.obj.name;
+//						var newObjType = $scope.form.obj.objTypes;
+						var newObj = $scope.scheda.obj.name;
+						var newObjType = $scope.scheda.obj.objTypes;
 						// building the new Node object
 						// using the array length to generate an id for the
 						// sample (you
 						// can do it any other way)
 						var newNode = {
-							id : 'n' + ($scope.mapData.length),
+							id : ($scope.mapData.length),
 							name : newObj,
 							type : newObjType
 						};
@@ -145,7 +175,7 @@ angular
 						// broadcasting the event
 						$rootScope.$broadcast('appChanged');
 						// resetting the form
-						$scope.form.obj = '';
+						$scope.scheda.obj = '';
 						$scope.$broadcast('schemaFormRedraw');
 					};
 
@@ -172,26 +202,6 @@ angular
 						$scope.formEdges = '';
 					};
 
-					$scope.typeschema = {
-				            type: "object",
-				            properties: {
-				                name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
-				                title: {
-				                    type: "string",
-				                    enum: ['dr','jr','sir','mrs','mr','NaN','dj']
-				                }
-				            }
-				        };
-					
-					$scope.typeschema = { 
-							type: "object", 
-							title: "DockerContainerProperties properties", 
-							properties: {
-								entrypoint:{title:"Entry1point in the Dockerfile",type:"string"},
-								from:{title:"Base image1",type:"string"},
-								cmd:{title:"Command in th1e Dockerfile",type:"string"}
-							}
- 						};
 
 
 					
@@ -204,33 +214,41 @@ angular
 						// console and to an alert
 						console.debug(value);
 //						alert(value);
-						console.debug('before'+$scope.typeschema);
-						console.debug($scope.typeschema);
-						$scope.typeschema = JSON.parse(JSON.stringify(value));
-						console.debug('after'+$scope.typeschema);
-						console.debug($scope.typeschema);
+						console.debug('before'+$scope.schema);
+						console.debug($scope.schema);
+						$scope.schema = JSON.parse(JSON.stringify(value.props));
+						$scope.workingNode = value.id;
+						console.debug('after'+$scope.schema);
+						console.debug($scope.schema);
 //						$scope.typeform.pop();
+						$scope.form = [ "*", {
+							type : "submit",
+							title : "Save"
+						} ];
+
+						$scope.model = {};
 						$scope.$broadcast('schemaFormRedraw');
+						$scope.$broadcast('schemaFormRedraw');
+						
 					};
 
-					$scope.typeform = [ "*", {
-						type : "submit",
-						title : "Save"
-					} ];
-
-					$scope.typemodel = {};
 
 					$scope.onSubmit = function(form) {
 						// First we broadcast an event so all fields validate
 						// themselves
 						$scope.$broadcast('schemaFormValidate');
-
+console.debug($scope.model);
+console.debug($scope.mapData);
+console.debug($scope.workingNode);
+console.debug($scope.mapData[$scope.workingNode]);
+$scope.mapData[$scope.workingNode].model = $scope.model;
+console.debug($scope.mapData[$scope.workingNode]);
 						// Then we check if the form is valid
 						if (form.$valid) {
 							// ... do whatever you need to do with your data.
 							console.debug("The form is valid, let's send it: "
-									+ form.node_id.$modelValue + " "
-									+ form.memory.$modelValue);
+									
+									);
 							var callback = function(data) {
 								console
 										.debug("sendCustomForm succeeded with data: "
@@ -244,5 +262,21 @@ angular
 						$scope.mapData = [];
 						$scope.edgeData = [];
 						$rootScope.$broadcast('appChanged');
+					}
+					
+					$scope.sendService = function (){
+						console.debug("sending data");
+						var data = JSON.stringify({
+							nodes: $scope.mapData,
+							edges: $scope.edgeData
+						});
+						
+						$http({url:"/api/sendData",data:data,
+							method:"POST",
+							headers:{"Content-Type": "text/plain",}
+							}).success(function(data, status){
+							console.debug(data);
+							console.debug(status);
+						});
 					}
 				});
