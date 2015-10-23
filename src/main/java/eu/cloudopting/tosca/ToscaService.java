@@ -118,7 +118,7 @@ public class ToscaService {
 		log.debug(xsModel.toString());
 		final XSInstance xsInstance = new XSInstance();
 		xsInstance.generateOptionalElements = Boolean.TRUE; // null means random
-//		final QName rootElement = new QName(null, element);
+		// final QName rootElement = new QName(null, element);
 		final QName rootElement = new QName("http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes", element);
 		log.debug(rootElement.toString());
 		XMLDocument sampleXml;
@@ -300,7 +300,7 @@ public class ToscaService {
 			for (int i = 0; i < nodes.getLength(); ++i) {
 				String name = nodes.item(i).getNodeName();
 				log.debug(name);
-				
+
 				String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
 				log.debug(title);
 				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
@@ -315,11 +315,11 @@ public class ToscaService {
 				default:
 					break;
 				}
-				
+
 				form.put("title", title);
 				form.put("type", formtype);
 				props.put(name, form);
-				
+
 			}
 
 			template = new JSONObject("{\"type\":\"object\",\"title\":\"" + element + " properties\"}");
@@ -338,6 +338,19 @@ public class ToscaService {
 
 	public JSONObject getNodeTypeJsonList() {
 		return this.nodeJsonList;
+	}
+
+	public void writeToscaDefinition( JSONObject data){
+		//recover the definition template.
+		try {
+			String serviceName = data.getString("serviceName");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//cycle in the nodes
+		
 	}
 
 	/**

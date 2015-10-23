@@ -1,5 +1,11 @@
 package eu.cloudopting.web.rest;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import eu.cloudopting.tosca.ToscaService;
+import eu.cloudopting.tosca.utils.ZipDirectory;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +28,9 @@ public class CytoscapeController {
 	
 	@Autowired
 	ToscaService toscaService;
+	
+	@Autowired
+	ZipDirectory zipDirectory;
 
 	@RequestMapping(value = "/nodes1", method = RequestMethod.GET)
 	@ResponseBody
@@ -67,6 +77,32 @@ public class CytoscapeController {
 	@ResponseBody
 	public String sendData(@RequestBody String payload){
 		log.debug(payload);
+		JSONObject toscadata = null;
+		try {
+			toscadata = new JSONObject(payload);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// process definition
+		toscaService.writeToscaDefinition(toscadata);
+		
+		
+		// copy template dir in tmp
+		File srcDir = new File("toscaTemplate");
+		File destDir = new File("/tmp/tosca");
+		try {
+			FileUtils.copyDirectory(srcDir, destDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<File> fileList = new ArrayList<File>();
+		zipDirectory.getAllFiles(destDir, fileList);
+		zipDirectory.writeZipFile(destDir, fileList);
+		
+		
 		return null;
 	}
 }

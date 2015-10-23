@@ -268,7 +268,8 @@ console.debug($scope.mapData[$scope.workingNode]);
 						console.debug("sending data");
 						var data = JSON.stringify({
 							nodes: $scope.mapData,
-							edges: $scope.edgeData
+							edges: $scope.edgeData,
+							serviceName: "service"
 						});
 						
 						$http({url:"/api/sendData",data:data,
