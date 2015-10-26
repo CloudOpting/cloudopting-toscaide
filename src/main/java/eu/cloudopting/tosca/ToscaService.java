@@ -53,6 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -82,6 +83,7 @@ public class ToscaService {
 
 	private ArrayList<String> nodeTypeList;
 	private JSONObject nodeJsonList;
+	private DocumentImpl definitionTemplate;
 
 	@Autowired
 	private ToscaUtils toscaUtils;
@@ -108,6 +110,24 @@ public class ToscaService {
 			e2.printStackTrace();
 		}
 		prepareNodeTypes();
+		readDefinitionTemplate();
+	}
+
+	private void readDefinitionTemplate() {
+		// TODO Auto-generated method stub
+		InputStream in;
+		
+		try {
+			in = new FileInputStream("definitionsTemplate.xml");
+			this.definitionTemplate = (DocumentImpl) this.db.parse(in);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public String readXsd(String element) {
@@ -344,11 +364,26 @@ public class ToscaService {
 		//recover the definition template.
 		try {
 			String serviceName = data.getString("serviceName");
+			log.debug(serviceName);
+			this.definitionTemplate.getElementsByTagName("Definitions").item(0).getAttributes().getNamedItem("id").setTextContent(serviceName);
+			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("id").setTextContent(serviceName);
+			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("name").setTextContent(serviceName);
+			
+			JSONArray nodeArr = data.getJSONArray("nodes");
+			
+			for (int i = 0; i < nodeArr.length(); i++) {
+				JSONObject theNode = nodeArr.getJSONObject(i);
+				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
+				nodeTemplate.setAttribute("id", theNode.getString("name"));
+				nodeTemplate.setAttribute("type", theNode.getString("type"));
+				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
+				
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		log.debug(this.definitionTemplate.saveXML(null));
 		//cycle in the nodes
 		
 	}
