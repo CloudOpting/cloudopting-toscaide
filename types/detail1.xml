@@ -1,12 +1,14 @@
 <NodeType name="VMHost" shape="rectangle" color="#992222">
 	<DerivedFrom typeRef="xs:QName" />
-	<PropertiesDefinition element="VMhostProperties" type="tVMhostProperties" />
+	<PropertiesDefinition element="VMhostProperties"
+		type="tVMhostProperties" />
 	<RequirementDefinitions>
 		<RequirementDefinition name="xs:string"
 			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
 			<Constraints>
 				<Constraint constraintType="xs:anyURI">
-					constraint type specific content
+					constraint type specific
+					content
 				</Constraint>
 			</Constraints>
 		</RequirementDefinition>
@@ -23,18 +25,3 @@
 		</Interface>
 	</Interfaces>
 </NodeType>
-<NodeTypeImplementation nodeType="DockerContainer" name="DockerContainerImpl">
-		<ImplementationArtifacts>
-			<ImplementationArtifact artifactType="PuppetTemplate" artifactRef="DockerContainerPT">
-			</ImplementationArtifact>
-			<ImplementationArtifact artifactType="DockerfileTemplate" artifactRef="DockerContainerDT">
-			</ImplementationArtifact>
-		</ImplementationArtifacts>
-		<DeploymentArtifacts>
-			<DeploymentArtifact name="ClearoApacheDC.dockerfile" artifactType="DockerfileTemplate" artifactRef="DockerContainerDT">
-			</DeploymentArtifact>
-			<DeploymentArtifact name="" artifactType="PuppetTemplate"
-				artifactRef="DockerContainerPT">
-			</DeploymentArtifact>
-		</DeploymentArtifacts>
-	</NodeTypeImplementation>

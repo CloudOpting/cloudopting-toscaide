@@ -86,6 +86,7 @@ public class ToscaService {
 	private JSONObject nodeJsonList;
 	private JSONObject nodeJsonTypeList;
 	private DocumentImpl definitionTemplate;
+	private DocumentImpl documentTypes;
 
 	@Autowired
 	private ToscaUtils toscaUtils;
@@ -118,7 +119,7 @@ public class ToscaService {
 	private void readDefinitionTemplate() {
 		// TODO Auto-generated method stub
 		InputStream in;
-		
+
 		try {
 			in = new FileInputStream("definitionsTemplate.xml");
 			this.definitionTemplate = (DocumentImpl) this.db.parse(in);
@@ -129,7 +130,7 @@ public class ToscaService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public String readXsd(String element) {
@@ -243,11 +244,11 @@ public class ToscaService {
 		 * e.printStackTrace(); }
 		 */
 		InputSource source = new InputSource(new StringReader(fullXml));
-		DocumentImpl document = null;
+		this.documentTypes = null;
 		try {
-			document = (DocumentImpl) this.db.parse(source);
+			this.documentTypes = (DocumentImpl) this.db.parse(source);
 			log.debug("xml: " + fullXml);
-			log.debug(document.toString());
+			log.debug(this.documentTypes.toString());
 			// this.xdocHash.put(customizationId, document);
 		} catch (SAXException e1) {
 			// TODO Auto-generated catch block
@@ -259,7 +260,7 @@ public class ToscaService {
 
 		DTMNodeList nodes = null;
 		try {
-			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType", document, XPathConstants.NODESET);
+			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType", this.documentTypes, XPathConstants.NODESET);
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -280,7 +281,7 @@ public class ToscaService {
 			JSONObject data = new JSONObject();
 			JSONObject dataType = new JSONObject();
 			JSONObject props = new JSONObject();
-			String theProperty = null; 
+			String theProperty = null;
 			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
 				log.debug(nodes.item(i).getChildNodes().item(j).getNodeName());
 				if (nodes.item(i).getChildNodes().item(j).getNodeName().equals("PropertiesDefinition")) {
@@ -320,7 +321,7 @@ public class ToscaService {
 	}
 
 	private JSONObject createFormObject(String element, String doc) {
-		log.debug("in createFormObject con: "+element);
+		log.debug("in createFormObject con: " + element);
 		JSONObject template = null;
 		try {
 			InputSource source = new InputSource(new StringReader(doc));
@@ -336,24 +337,24 @@ public class ToscaService {
 				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
 				log.debug(formtype);
 				JSONObject form = new JSONObject();
-//				String selectEnum = nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
+				// String selectEnum =
+				// nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
 				Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
-				if(nodeEnum != null){
+				if (nodeEnum != null) {
 					form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
 				}
 				/*
-				switch (formtype) {
-				case "select":
-					String titleMap = nodes.item(i).getAttributes().getNamedItem("titleMap").getNodeValue();
-					String selectType = nodes.item(i).getAttributes().getNamedItem("selectType").getNodeValue();
-					String selectEnum = nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
-					form.put("titleMap", new JSONArray(titleMap));
-					break;
-
-				default:
-					break;
-				}
-*/
+				 * switch (formtype) { case "select": String titleMap =
+				 * nodes.item(i).getAttributes().getNamedItem("titleMap").
+				 * getNodeValue(); String selectType =
+				 * nodes.item(i).getAttributes().getNamedItem("selectType").
+				 * getNodeValue(); String selectEnum =
+				 * nodes.item(i).getAttributes().getNamedItem("enum").
+				 * getNodeValue(); form.put("titleMap", new
+				 * JSONArray(titleMap)); break;
+				 * 
+				 * default: break; }
+				 */
 				form.put("title", title);
 				form.put("type", formtype);
 				props.put(name, form);
@@ -378,15 +379,18 @@ public class ToscaService {
 		return this.nodeJsonList;
 	}
 
-	public void writeToscaDefinition( JSONObject data){
-		//recover the definition template.
+	public void writeToscaDefinition(JSONObject data) {
+		// recover the definition template.
 		try {
 			String serviceName = data.getString("serviceName");
 			log.debug(serviceName);
-			this.definitionTemplate.getElementsByTagName("Definitions").item(0).getAttributes().getNamedItem("id").setTextContent(serviceName);
-			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("id").setTextContent(serviceName);
-			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("name").setTextContent(serviceName);
-			
+			this.definitionTemplate.getElementsByTagName("Definitions").item(0).getAttributes().getNamedItem("id")
+					.setTextContent(serviceName);
+			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("id")
+					.setTextContent(serviceName);
+			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("name")
+					.setTextContent(serviceName);
+
 			JSONArray nodeArr = data.getJSONArray("nodes");
 			log.debug("the original JSON string");
 			log.debug(this.nodeJsonTypeList.toString());
@@ -396,46 +400,71 @@ public class ToscaService {
 				String nodeId = theNode.getString("name");
 				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
 				Element properties = this.definitionTemplate.createElement("Properties");
-				String propertyName = this.nodeJsonTypeList.getJSONObject(theNode.getString("type")).getString("propName");
-				Element thePropBlock = this.definitionTemplate.createElement("co:"+propertyName);
+				String propertyName = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"))
+						.getString("propName");
+				Element thePropBlock = this.definitionTemplate.createElement("co:" + propertyName);
 				JSONObject model = theNode.getJSONObject("model");
 				JSONObject jsonType = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"));
-				
+
 				Iterator allProps = model.keys();
 				while (allProps.hasNext()) {
 					String aProp = (String) allProps.next();
 					log.debug(aProp);
-					
-					Element aNodeProp = this.definitionTemplate.createElement("co:"+aProp);
+
+					Element aNodeProp = this.definitionTemplate.createElement("co:" + aProp);
 					String proVal = model.getString(aProp);
-					if(proVal.equals("userinput")){
+					if (proVal.equals("userinput")) {
 						JSONObject proDesc = new JSONObject();
-						JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties").getJSONObject(aProp);
-						String xpath = "//NodeTemplate[@id='"+nodeId+"']/Properties/co:"+propertyName+"/co:"+aProp;
+						JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties")
+								.getJSONObject(aProp);
+						String xpath = "//NodeTemplate[@id='" + nodeId + "']/Properties/co:" + propertyName + "/co:"
+								+ aProp;
 						proDesc.put(aProp, new JSONObject().put("form", proInfo).put("xpath", xpath));
 						log.debug(xpath);
-						aNodeProp.appendChild(this.definitionTemplate.createProcessingInstruction("userInput", proDesc.toString()));
-					}else{
-					aNodeProp.appendChild(this.definitionTemplate.createTextNode(proVal));
+						aNodeProp.appendChild(
+								this.definitionTemplate.createProcessingInstruction("userInput", proDesc.toString()));
+					} else {
+						aNodeProp.appendChild(this.definitionTemplate.createTextNode(proVal));
 					}
 					thePropBlock.appendChild(aNodeProp);
 				}
-								
-				
+
 				nodeTemplate.setAttribute("id", nodeId);
 				nodeTemplate.setAttribute("type", nodeType);
 				properties.appendChild(thePropBlock);
 				nodeTemplate.appendChild(properties);
-				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
 				
+				// Manage Artifacts
+				DTMNodeList nodes = null;
+				try {
+					nodes = (DTMNodeList) this.xpath.evaluate(
+							"//Nodes/NodeType[@name='"+nodeType+"']/* | //Nodes/NodeTypeImplementation[@nodeType='"+nodeType+"']/*",
+							this.documentTypes, XPathConstants.NODESET);
+
+					for (int j = 0; j < nodes.getLength(); j++) {
+						log.debug(nodes.item(j).getNodeName());
+						if (nodes.item(j).getNodeName().equals("DeploymentArtifacts")){
+							nodeTemplate.appendChild(nodes.item(j));
+							
+						}
+						
+					}
+				} catch (XPathExpressionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
+				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
+
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		log.debug(this.definitionTemplate.saveXML(null));
-		//cycle in the nodes
-		
+		// cycle in the nodes
+
 	}
 
 	/**
