@@ -392,22 +392,38 @@ public class ToscaService {
 			log.debug(this.nodeJsonTypeList.toString());
 			for (int i = 0; i < nodeArr.length(); i++) {
 				JSONObject theNode = nodeArr.getJSONObject(i);
+				String nodeType = theNode.getString("type");
+				String nodeId = theNode.getString("name");
 				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
 				Element properties = this.definitionTemplate.createElement("Properties");
-				Element thePropBlock = this.definitionTemplate.createElement("co:"+this.nodeJsonTypeList.getJSONObject(theNode.getString("type")).getString("propName"));
+				String propertyName = this.nodeJsonTypeList.getJSONObject(theNode.getString("type")).getString("propName");
+				Element thePropBlock = this.definitionTemplate.createElement("co:"+propertyName);
 				JSONObject model = theNode.getJSONObject("model");
+				JSONObject jsonType = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"));
+				
 				Iterator allProps = model.keys();
 				while (allProps.hasNext()) {
 					String aProp = (String) allProps.next();
 					log.debug(aProp);
+					
 					Element aNodeProp = this.definitionTemplate.createElement("co:"+aProp);
-					aNodeProp.appendChild(this.definitionTemplate.createTextNode(model.getString(aProp)));
+					String proVal = model.getString(aProp);
+					if(proVal.equals("userinput")){
+						JSONObject proDesc = new JSONObject();
+						JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties").getJSONObject(aProp);
+						String xpath = "//NodeTemplate[@id='"+nodeId+"']/Properties/co:"+propertyName+"/co:"+aProp;
+						proDesc.put(aProp, new JSONObject().put("form", proInfo).put("xpath", xpath));
+						log.debug(xpath);
+						aNodeProp.appendChild(this.definitionTemplate.createProcessingInstruction("userInput", proDesc.toString()));
+					}else{
+					aNodeProp.appendChild(this.definitionTemplate.createTextNode(proVal));
+					}
 					thePropBlock.appendChild(aNodeProp);
 				}
 								
 				
-				nodeTemplate.setAttribute("id", theNode.getString("name"));
-				nodeTemplate.setAttribute("type", theNode.getString("type"));
+				nodeTemplate.setAttribute("id", nodeId);
+				nodeTemplate.setAttribute("type", nodeType);
 				properties.appendChild(thePropBlock);
 				nodeTemplate.appendChild(properties);
 				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
