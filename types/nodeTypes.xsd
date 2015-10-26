@@ -118,6 +118,13 @@
 			<xs:enumeration value="4" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="tram">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="512" />
+			<xs:enumeration value="1024" />
+			<xs:enumeration value="2048" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="tVMhostProperties">
 		<xs:sequence>
 			<xs:element name="cpu">
@@ -125,8 +132,8 @@
 					<xs:simpleContent>
 						<xs:extension base="tcpu">
 							<xs:attribute name="title" fixed="CPU"></xs:attribute>
-							<xs:attribute name="formtype" fixed="select"></xs:attribute>
-							<xs:attribute name="titleMap" fixed="[{value:'1',name:'1'}]"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum" fixed="['1','2','4']"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
@@ -134,9 +141,10 @@
 			<xs:element name="ram">
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="xs:string">
+						<xs:extension base="tcpu">
 							<xs:attribute name="title" fixed="RAM"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum" fixed="['512','1024','2048']"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>

@@ -54,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -83,6 +84,7 @@ public class ToscaService {
 
 	private ArrayList<String> nodeTypeList;
 	private JSONObject nodeJsonList;
+	private JSONObject nodeJsonTypeList;
 	private DocumentImpl definitionTemplate;
 
 	@Autowired
@@ -265,6 +267,7 @@ public class ToscaService {
 		log.debug(nodes.toString());
 		this.nodeTypeList = new ArrayList<String>();
 		this.nodeJsonList = new JSONObject();
+		this.nodeJsonTypeList = new JSONObject();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
 			String nodeName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
@@ -275,7 +278,9 @@ public class ToscaService {
 			String shape = nodes.item(i).getAttributes().getNamedItem("shape").getNodeValue();
 			// JSONObject jret = new JSONObject();
 			JSONObject data = new JSONObject();
+			JSONObject dataType = new JSONObject();
 			JSONObject props = new JSONObject();
+			String theProperty = null; 
 			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
 				log.debug(nodes.item(i).getChildNodes().item(j).getNodeName());
 				if (nodes.item(i).getChildNodes().item(j).getNodeName().equals("PropertiesDefinition")) {
@@ -288,6 +293,7 @@ public class ToscaService {
 					log.debug(xsdType);
 					String xmlModel = readXsd(element);
 					props = createFormObject(element, xmlModel);
+					theProperty = element;
 				}
 			}
 			try {
@@ -296,9 +302,12 @@ public class ToscaService {
 				data.put("shape", shape);
 				data.put("color", color);
 				data.put("props", props);
+				dataType.put("props", props);
+				dataType.put("propName", theProperty);
 				// jret.put(nodeName, data);
 				log.debug(data.toString());
 				this.nodeJsonList.put(nodeName, data);
+				this.nodeJsonTypeList.put(nodeName, dataType);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -311,6 +320,7 @@ public class ToscaService {
 	}
 
 	private JSONObject createFormObject(String element, String doc) {
+		log.debug("in createFormObject con: "+element);
 		JSONObject template = null;
 		try {
 			InputSource source = new InputSource(new StringReader(doc));
@@ -326,16 +336,24 @@ public class ToscaService {
 				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
 				log.debug(formtype);
 				JSONObject form = new JSONObject();
+//				String selectEnum = nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
+				Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
+				if(nodeEnum != null){
+					form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
+				}
+				/*
 				switch (formtype) {
 				case "select":
 					String titleMap = nodes.item(i).getAttributes().getNamedItem("titleMap").getNodeValue();
+					String selectType = nodes.item(i).getAttributes().getNamedItem("selectType").getNodeValue();
+					String selectEnum = nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
 					form.put("titleMap", new JSONArray(titleMap));
 					break;
 
 				default:
 					break;
 				}
-
+*/
 				form.put("title", title);
 				form.put("type", formtype);
 				props.put(name, form);
@@ -370,12 +388,28 @@ public class ToscaService {
 			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("name").setTextContent(serviceName);
 			
 			JSONArray nodeArr = data.getJSONArray("nodes");
-			
+			log.debug("the original JSON string");
+			log.debug(this.nodeJsonTypeList.toString());
 			for (int i = 0; i < nodeArr.length(); i++) {
 				JSONObject theNode = nodeArr.getJSONObject(i);
 				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
+				Element properties = this.definitionTemplate.createElement("Properties");
+				Element thePropBlock = this.definitionTemplate.createElement("co:"+this.nodeJsonTypeList.getJSONObject(theNode.getString("type")).getString("propName"));
+				JSONObject model = theNode.getJSONObject("model");
+				Iterator allProps = model.keys();
+				while (allProps.hasNext()) {
+					String aProp = (String) allProps.next();
+					log.debug(aProp);
+					Element aNodeProp = this.definitionTemplate.createElement("co:"+aProp);
+					aNodeProp.appendChild(this.definitionTemplate.createTextNode(model.getString(aProp)));
+					thePropBlock.appendChild(aNodeProp);
+				}
+								
+				
 				nodeTemplate.setAttribute("id", theNode.getString("name"));
 				nodeTemplate.setAttribute("type", theNode.getString("type"));
+				properties.appendChild(thePropBlock);
+				nodeTemplate.appendChild(properties);
 				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
 				
 			}
