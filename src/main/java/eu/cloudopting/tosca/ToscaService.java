@@ -269,6 +269,8 @@ public class ToscaService {
 		this.nodeTypeList = new ArrayList<String>();
 		this.nodeJsonList = new JSONObject();
 		this.nodeJsonTypeList = new JSONObject();
+		
+		// NodeType cycle
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
 			String nodeName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
@@ -296,6 +298,8 @@ public class ToscaService {
 					props = createFormObject(element, xmlModel);
 					theProperty = element;
 				}
+				// nee dto manage capabilities
+				// //CapabilityType[@name=string(//nodes/NodeType[@name='DockerContainer']/CapabilityDefinitions/CapabilityDefinition/@capabilityType)]/PropertiesDefinition
 			}
 			try {
 				// props.put("cpu", 2);
