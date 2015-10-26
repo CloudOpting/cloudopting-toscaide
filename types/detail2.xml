@@ -1,18 +1,21 @@
 <NodeType name="DockerContainer" shape="pentagon" color="#118844">
 	<DerivedFrom typeRef="root" />
-	<PropertiesDefinition element="DockerContainerProperties" type="tDockerContainerProperties" />
+	<PropertiesDefinition element="DockerContainerProperties"
+		type="tDockerContainerProperties" />
 	<RequirementDefinitions>
 		<RequirementDefinition name="xs:string"
 			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
 			<Constraints>
 				<Constraint constraintType="xs:anyURI">
-					constraint type specific content
+					constraint type specific
+					content
 				</Constraint>
 			</Constraints>
 		</RequirementDefinition>
 	</RequirementDefinitions>
 	<CapabilityDefinitions>
-			<CapabilityDefinition name="DockerContainerCapabilities" capabilityType="tDockerContainerCapabilities" />
+		<CapabilityDefinition name="DockerContainerCapabilities"
+			capabilityType="tDockerContainerCapabilities" />
 	</CapabilityDefinitions>
 	<Interfaces>
 		<Interface name="ProjectInterface">
@@ -26,7 +29,8 @@
 		</Interface>
 	</Interfaces>
 </NodeType>
-<NodeTypeImplementation nodeType="DockerContainer" name="DockerContainerImpl">
+<NodeTypeImplementation nodeType="DockerContainer"
+	name="DockerContainerImpl">
 	<ImplementationArtifacts>
 		<ImplementationArtifact artifactType="PuppetTemplate"
 			artifactRef="DockerContainerPT">

@@ -44,6 +44,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="DockerContainerProperties" type="tDockerContainerProperties" />
+	<xs:complexType name="df"></xs:complexType>
 	<xs:complexType name="tSLA">
 		<xs:sequence>
 			<xs:element default="1" name="NumCpus">
