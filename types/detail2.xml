@@ -14,8 +14,7 @@
 		</RequirementDefinition>
 	</RequirementDefinitions>
 	<CapabilityDefinitions>
-		<CapabilityDefinition name="DockerContainerCapabilities"
-			capabilityType="tDockerContainerCapabilities" />
+		<CapabilityDefinition capabilityType="DockerContainerPortsCaps" />
 	</CapabilityDefinitions>
 	<Interfaces>
 		<Interface name="ProjectInterface">
@@ -48,7 +47,6 @@
 		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
-<CapabilityType name="NCName">
-		<documentation></documentation>
-		<PropertiesDefinition element="QName" type="QName" />
-	</CapabilityType>
+<CapabilityType name="DockerContainerPortsCaps">
+	<PropertiesDefinition element="DockerContainerPortsCaps" type="tDockerContainerPortsCaps" />
+</CapabilityType>
