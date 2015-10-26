@@ -11,6 +11,9 @@
 			</Constraints>
 		</RequirementDefinition>
 	</RequirementDefinitions>
+	<CapabilityDefinitions>
+			<CapabilityDefinition name="DockerContainerCapabilities" capabilityType="tDockerContainerCapabilities" />
+	</CapabilityDefinitions>
 	<Interfaces>
 		<Interface name="ProjectInterface">
 			<Operation name="CreateProject">
