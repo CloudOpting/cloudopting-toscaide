@@ -48,3 +48,7 @@
 		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
+<CapabilityType name="NCName">
+		<documentation></documentation>
+		<PropertiesDefinition element="QName" type="QName" />
+	</CapabilityType>
