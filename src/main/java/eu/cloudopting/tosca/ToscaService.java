@@ -269,7 +269,7 @@ public class ToscaService {
 		this.nodeTypeList = new ArrayList<String>();
 		this.nodeJsonList = new JSONObject();
 		this.nodeJsonTypeList = new JSONObject();
-		
+
 		// NodeType cycle
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
@@ -283,10 +283,12 @@ public class ToscaService {
 			JSONObject data = new JSONObject();
 			JSONObject dataType = new JSONObject();
 			JSONObject props = new JSONObject();
+			JSONObject capProps = new JSONObject();
 			String theProperty = null;
 			for (int j = 0; j < nodes.item(i).getChildNodes().getLength(); ++j) {
 				log.debug(nodes.item(i).getChildNodes().item(j).getNodeName());
-				if (nodes.item(i).getChildNodes().item(j).getNodeName().equals("PropertiesDefinition")) {
+				String childNode = nodes.item(i).getChildNodes().item(j).getNodeName();
+				if (childNode.equals("PropertiesDefinition")) {
 					log.debug("matched PropertiesDefinition");
 					String element = nodes.item(i).getChildNodes().item(j).getAttributes().getNamedItem("element")
 							.getNodeValue();
@@ -297,17 +299,54 @@ public class ToscaService {
 					String xmlModel = readXsd(element);
 					props = createFormObject(element, xmlModel);
 					theProperty = element;
+				} else if (childNode.equals("CapabilityDefinitions")) {
+					log.debug("matched CapabilityDefinitions");
+					String xpathCap = "//CapabilityType[@name=string(//Nodes/NodeType[@name='" + nodeName
+							+ "']/CapabilityDefinitions/CapabilityDefinition/@capabilityType)]/PropertiesDefinition";
+					log.debug(xpathCap);
+					DTMNodeList nodeCaps = null;
+					try {
+						nodeCaps = (DTMNodeList) this.xpath.evaluate(xpathCap, this.documentTypes,
+								XPathConstants.NODESET);
+					} catch (XPathExpressionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String elCapProp = nodeCaps.item(0).getAttributes().getNamedItem("element").getNodeValue();
+					log.debug(elCapProp);
+					String xmlCapModel = readXsd(elCapProp);
+					log.debug(xmlCapModel);
+					capProps = createFormObject(elCapProp, xmlCapModel);
+					log.debug(capProps.toString());
+
 				}
-				// nee dto manage capabilities
-				// //CapabilityType[@name=string(//nodes/NodeType[@name='DockerContainer']/CapabilityDefinitions/CapabilityDefinition/@capabilityType)]/PropertiesDefinition
+
 			}
 			try {
-				// props.put("cpu", 2);
-				// props.put("ram", 3);
+				// need to merge all the properties
+				JSONObject mergedJSON = new JSONObject();
+
+				JSONObject[] objs = new JSONObject[] { capProps, props };
+				for (JSONObject obj : objs) {
+				    Iterator it = obj.keys();
+				    while (it.hasNext()) {
+				        String key = (String)it.next();
+				        mergedJSON.put(key, obj.get(key));
+				    }
+				}
+/*				
+				mergedJSON = new JSONObject(props, JSONObject.getNames(props));
+				for (String crunchifyKey : JSONObject.getNames(capProps)) {
+					mergedJSON.put(crunchifyKey, capProps.get(crunchifyKey));
+				}*/
+				
+				JSONObject template = new JSONObject("{\"type\":\"object\",\"title\":\"Node properties\"}");
+				template.put("properties", mergedJSON);
+
 				data.put("shape", shape);
 				data.put("color", color);
-				data.put("props", props);
-				dataType.put("props", props);
+				data.put("props", template);
+				dataType.put("props", template);
 				dataType.put("propName", theProperty);
 				// jret.put(nodeName, data);
 				log.debug(data.toString());
@@ -326,53 +365,82 @@ public class ToscaService {
 
 	private JSONObject createFormObject(String element, String doc) {
 		log.debug("in createFormObject con: " + element);
-		JSONObject template = null;
+		JSONObject returnObj = new JSONObject();
+		JSONObject props = null;
 		try {
+			// read the XML document
 			InputSource source = new InputSource(new StringReader(doc));
 			DocumentImpl document = (DocumentImpl) this.db.parse(source);
-			DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("//*/*", document, XPathConstants.NODESET);
-			JSONObject props = new JSONObject();
-			for (int i = 0; i < nodes.getLength(); ++i) {
-				String name = nodes.item(i).getNodeName();
-				log.debug(name);
+			// look if the parent node has some attributes for the form (this
+			// used for arrays)
+			Node parentFormTypeNode = document.getElementsByTagName(element).item(0).getAttributes()
+					.getNamedItem("formtype");
+			String parentFormType = null;
+			// get the props of the element
+			props = processProperties(document);
+			log.debug(props.toString());
+			if (parentFormTypeNode != null) {
+				log.debug("the parent node has a formtype");
+				parentFormType = parentFormTypeNode.getNodeValue();
+				String parentFormTitle = document.getElementsByTagName(element).item(0).getAttributes()
+						.getNamedItem("formtype").getNodeValue();
+				switch (parentFormType) {
+				case "array":
+					JSONObject arr = new JSONObject("{\"type\":\"array\"}");
+					arr.put("items", new JSONObject().put("type", "object").put("properties", props));
+					returnObj.put(element, arr);
+					break;
 
-				String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
-				log.debug(title);
-				String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
-				log.debug(formtype);
-				JSONObject form = new JSONObject();
-				// String selectEnum =
-				// nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
-				Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
-				if (nodeEnum != null) {
-					form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
+				default:
+					break;
 				}
-				/*
-				 * switch (formtype) { case "select": String titleMap =
-				 * nodes.item(i).getAttributes().getNamedItem("titleMap").
-				 * getNodeValue(); String selectType =
-				 * nodes.item(i).getAttributes().getNamedItem("selectType").
-				 * getNodeValue(); String selectEnum =
-				 * nodes.item(i).getAttributes().getNamedItem("enum").
-				 * getNodeValue(); form.put("titleMap", new
-				 * JSONArray(titleMap)); break;
-				 * 
-				 * default: break; }
-				 */
-				form.put("title", title);
-				form.put("type", formtype);
-				props.put(name, form);
-
+			} else {
+				returnObj = props;
 			}
 
-			template = new JSONObject("{\"type\":\"object\",\"title\":\"" + element + " properties\"}");
-			template.put("properties", props);
 		} catch (JSONException | SAXException | IOException | XPathExpressionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return template;
+		return returnObj;
+	}
+
+	private JSONObject processProperties(DocumentImpl document) throws XPathExpressionException, JSONException {
+		DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("//*/*", document, XPathConstants.NODESET);
+		JSONObject props = new JSONObject();
+		for (int i = 0; i < nodes.getLength(); ++i) {
+			String name = nodes.item(i).getNodeName();
+			log.debug(name);
+
+			String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
+			log.debug(title);
+			String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
+			log.debug(formtype);
+			JSONObject form = new JSONObject();
+			// String selectEnum =
+			// nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
+			Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
+			if (nodeEnum != null) {
+				form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
+			}
+			/*
+			 * switch (formtype) { case "select": String titleMap =
+			 * nodes.item(i).getAttributes().getNamedItem("titleMap").
+			 * getNodeValue(); String selectType =
+			 * nodes.item(i).getAttributes().getNamedItem("selectType").
+			 * getNodeValue(); String selectEnum =
+			 * nodes.item(i).getAttributes().getNamedItem("enum").
+			 * getNodeValue(); form.put("titleMap", new JSONArray(titleMap));
+			 * break;
+			 * 
+			 * default: break; }
+			 */
+			form.put("title", title);
+			form.put("type", formtype);
+			props.put(name, form);
+		}
+		return props;
 	}
 
 	public ArrayList<String> getNodeTypeList() {
@@ -437,28 +505,29 @@ public class ToscaService {
 				nodeTemplate.setAttribute("type", nodeType);
 				properties.appendChild(thePropBlock);
 				nodeTemplate.appendChild(properties);
-				
+
 				// Manage Artifacts
 				DTMNodeList nodes = null;
 				try {
-					nodes = (DTMNodeList) this.xpath.evaluate(
-							"//Nodes/NodeType[@name='"+nodeType+"']/* | //Nodes/NodeTypeImplementation[@nodeType='"+nodeType+"']/*",
-							this.documentTypes, XPathConstants.NODESET);
+					nodes = (DTMNodeList) this.xpath
+							.evaluate(
+									"//Nodes/NodeType[@name='" + nodeType
+											+ "']/* | //Nodes/NodeTypeImplementation[@nodeType='" + nodeType + "']/*",
+									this.documentTypes, XPathConstants.NODESET);
 
 					for (int j = 0; j < nodes.getLength(); j++) {
 						log.debug(nodes.item(j).getNodeName());
-						if (nodes.item(j).getNodeName().equals("DeploymentArtifacts")){
-							nodeTemplate.appendChild(nodes.item(j));
-							
+						if (nodes.item(j).getNodeName().equals("DeploymentArtifacts")) {
+							nodeTemplate.appendChild(nodes.item(j).cloneNode(true));
+
 						}
-						
+
 					}
 				} catch (XPathExpressionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-				
 				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
 
 			}

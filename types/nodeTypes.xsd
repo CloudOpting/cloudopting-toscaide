@@ -70,6 +70,7 @@
 		<xs:attribute name="title" fixed="Command in the Dockerfile"></xs:attribute>
 		<xs:attribute name="formtype" fixed="array"></xs:attribute>
 	</xs:complexType>
+	<xs:element name="DockerContainerPortsCaps" type="tDockerContainerPortsCaps" />
 	<xs:complexType name="tSLA">
 		<xs:sequence>
 			<xs:element default="1" name="NumCpus">
