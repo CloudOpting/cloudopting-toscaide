@@ -62,12 +62,17 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                     var eTarget = scope.cyEdges[i].target;
                     // get edge id
                     var eId = scope.cyEdges[i].id;
+                    var eType = scope.cyEdges[i].type;
+                    console.debug('edge type:'+scope.cyEdges[i].type);
                     // build the edge object
                     var edgeObj = {
                         data:{
                         id:eId,
                         source:eSource,
-                        target:eTarget
+                        target:eTarget,
+                        color:'#343434',
+                        style:'dotted',
+                        type: eType
                         }
                     };
                     // adding the edge object to the edges array
@@ -134,7 +139,9 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                         .css({
                             'width': '10',
                             'target-arrow-shape': 'triangle',
-                            'source-arrow-shape': 'triangle'
+                            'source-arrow-shape': 'circle',
+                            'line-color': 'data(color)',
+                            'line-style': 'data(style)'
                         })
                         .selector(':selected')
                         .css({

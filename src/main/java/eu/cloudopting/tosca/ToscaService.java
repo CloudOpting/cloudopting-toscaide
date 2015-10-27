@@ -485,6 +485,10 @@ public class ToscaService {
 		return this.nodeJsonList;
 	}
 
+	public JSONObject getEdgeTypeJsonList() {
+		return this.edgeJsonList;
+	}
+
 	public void writeToscaDefinition(JSONObject data, String destDir) {
 		// recover the definition template.
 		try {

@@ -203,7 +203,8 @@ angular
 						var newEdge = {
 							id : 'e' + ($scope.edgeData.length),
 							source : edge1,
-							target : edge2
+							target : edge2,
+							type   : $scope.formEdges.type
 						};
 						// adding the new edge object to the adges array
 						$scope.edgeData.push(newEdge);

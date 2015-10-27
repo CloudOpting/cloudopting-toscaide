@@ -35,40 +35,22 @@ public class CytoscapeController {
 	@RequestMapping(value = "/edges", method = RequestMethod.GET)
 	@ResponseBody
 	public String edgeArray() {
-		log.debug("in edgeTypes");
-/*		JSONObject jret = new JSONObject();
-		JSONObject data = new JSONObject();
-		JSONObject props = new JSONObject();
-		try {
-			props.put("cpu", 2);
-			props.put("ram", 3);
-			data.put("shape", "rectangle");
-			data.put("color", "#992222");
-			data.put("props", props);
-			jret.put("hostedon", data);
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*/
-		/*
-		JSONArray jret = null;
-		try {
-			jret = new JSONArray("['hostedon','link']");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String ret = jret.toString();
-		return ret;*/
+		log.debug("in edge");
 		JSONArray ret = new JSONArray(toscaService.getEdgeTypeList());
 		log.debug(ret.toString());
 		return ret.toString();
 
 	}
 	
+	@RequestMapping(value = "/nodeTypes", method = RequestMethod.GET)
+	@ResponseBody
+	public String getEdgesJsonList() {
+		log.debug("in edgeTypes");
+		String ret = toscaService.getEdgeTypeJsonList().toString();
+		log.debug(ret);
+		return ret;
+	}
+
 	@RequestMapping(value = "/nodes", method = RequestMethod.GET)
 	@ResponseBody
 	public String getNodesList() {
