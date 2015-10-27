@@ -237,11 +237,16 @@ angular
 							title : "Save"
 						} ];
 
+						console.debug("value.model");
+						console.debug($scope.mapData[value.id].model);
 						
-						// TODO if there is already a model use that one
-						$scope.model = {};
+						if (typeof $scope.mapData[value.id].model == "undefined"){
+							$scope.model = {};	
+						}else{
+							$scope.model = $scope.mapData[value.id].model;
+						}
 						$scope.$broadcast('schemaFormRedraw');
-//						$scope.$broadcast('schemaFormRedraw');
+
 						$scope.$apply();	
 					};
 
@@ -250,9 +255,11 @@ angular
 						// First we broadcast an event so all fields validate
 						// themselves
 						$scope.$broadcast('schemaFormValidate');
+						console.debug("saving the model");		
 console.debug($scope.model);
 console.debug($scope.mapData);
 console.debug($scope.workingNode);
+console.debug("the mapdata");
 console.debug($scope.mapData[$scope.workingNode]);
 $scope.mapData[$scope.workingNode].model = $scope.model;
 console.debug($scope.mapData[$scope.workingNode]);
