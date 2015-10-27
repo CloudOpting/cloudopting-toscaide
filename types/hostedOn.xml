@@ -1,0 +1,27 @@
+<NodeType name="VMHost" shape="rectangle" color="#992222">
+	<DerivedFrom typeRef="xs:QName" />
+	<PropertiesDefinition element="VMhostProperties"
+		type="tVMhostProperties" />
+	<RequirementDefinitions>
+		<RequirementDefinition name="xs:string"
+			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
+			<Constraints>
+				<Constraint constraintType="xs:anyURI">
+					constraint type specific
+					content
+				</Constraint>
+			</Constraints>
+		</RequirementDefinition>
+	</RequirementDefinitions>
+	<Interfaces>
+		<Interface name="ProjectInterface">
+			<Operation name="CreateProject">
+				<InputParameters>
+					<InputParameter name="ProjectName" type="xs:string" />
+					<InputParameter name="Owner" type="xs:string" />
+					<InputParameter name="AccountID" type="xs:string" />
+				</InputParameters>
+			</Operation>
+		</Interface>
+	</Interfaces>
+</NodeType>

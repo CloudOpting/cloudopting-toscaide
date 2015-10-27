@@ -50,7 +50,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:integer">
-							<xs:attribute name="title" fixed="Command in the Dockerfile"></xs:attribute>
+							<xs:attribute name="title" fixed="Port of the host"></xs:attribute>
 							<xs:attribute name="formtype" fixed="integer"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -60,7 +60,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:integer">
-							<xs:attribute name="title" fixed="Command in the Dockerfile"></xs:attribute>
+							<xs:attribute name="title" fixed="Port in the container"></xs:attribute>
 							<xs:attribute name="formtype" fixed="integer"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>

@@ -25,6 +25,9 @@
 					ng-options="c.name for c in mapData">
 						<option value="">To >></option>
 				</select>
+				<select ng-model="formEdges.type"
+					ng-options="name for name in formArr"></select><input
+					ng-model="formEdges.type" />
 					<button ng-click="addEdge()">Add edge</button>
 				</span>
 				<hr>

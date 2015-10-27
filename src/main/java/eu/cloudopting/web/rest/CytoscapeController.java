@@ -32,11 +32,11 @@ public class CytoscapeController {
 	@Autowired
 	ZipDirectory zipDirectory;
 
-	@RequestMapping(value = "/nodes1", method = RequestMethod.GET)
+	@RequestMapping(value = "/edges", method = RequestMethod.GET)
 	@ResponseBody
-	public String getNodes() {
-		log.debug("in getNodes");
-		JSONObject jret = new JSONObject();
+	public String edgeArray() {
+		log.debug("in edgeTypes");
+/*		JSONObject jret = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONObject props = new JSONObject();
 		try {
@@ -45,8 +45,16 @@ public class CytoscapeController {
 			data.put("shape", "rectangle");
 			data.put("color", "#992222");
 			data.put("props", props);
-			jret.put("container", data);
+			jret.put("hostedon", data);
 			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*/
+		JSONArray jret = null;
+		try {
+			jret = new JSONArray("['hostedon','link']");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,6 +84,7 @@ public class CytoscapeController {
 	@RequestMapping(value = "/sendData", method = RequestMethod.POST, consumes = "text/plain")
 	@ResponseBody
 	public String sendData(@RequestBody String payload){
+		log.debug("the received payload");
 		log.debug(payload);
 		JSONObject toscadata = null;
 		try {
@@ -85,7 +94,7 @@ public class CytoscapeController {
 			e1.printStackTrace();
 		}
 		// process definition
-		toscaService.writeToscaDefinition(toscadata);
+		
 		
 		
 		// copy template dir in tmp
@@ -97,6 +106,8 @@ public class CytoscapeController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String destDirPath = "/tmp/tosca/Definitions/Service-Definitions.xml";
+		toscaService.writeToscaDefinition(toscadata, destDirPath);
 		
 		List<File> fileList = new ArrayList<File>();
 		zipDirectory.getAllFiles(destDir, fileList);

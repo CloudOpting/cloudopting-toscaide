@@ -1,7 +1,7 @@
 TOSCA-Meta-Version: 1.0
 CSAR-Version: 1.0
 Created-By: CSI
-Entry-Definitions: Definitions/Clearo-Definitions.xml
+Entry-Definitions: Definitions/Service-Definitions.xml
 
 Name: Templates/Dockerfile.ftl
 Content-Type: text/plain

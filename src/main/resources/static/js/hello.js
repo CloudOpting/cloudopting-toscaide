@@ -97,6 +97,7 @@ angular
 					// container objects
 					$scope.mapData = [];
 					$scope.edgeData = [];
+					$scope.formTypes = [];
 					// data types/groups object - used Cytoscape's shapes just
 					// to make
 					// it more clear
@@ -149,6 +150,16 @@ angular
 						$rootScope.$broadcast('appChanged');
 
 					});
+
+					$http.get('/api/edges').then(function data(response) {
+						console.debug('called edges');
+						console.debug(response);
+						$scope.formArr = response.data;
+						console.debug($scope.formTypes);
+						$rootScope.$broadcast('appChanged');
+
+					});
+
 					// add object from the form then broadcast event which
 					// triggers the
 					// directive redrawing of the chart

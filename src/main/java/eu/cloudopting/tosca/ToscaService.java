@@ -53,6 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -451,7 +452,7 @@ public class ToscaService {
 		return this.nodeJsonList;
 	}
 
-	public void writeToscaDefinition(JSONObject data) {
+	public void writeToscaDefinition(JSONObject data, String destDir) {
 		// recover the definition template.
 		try {
 			String serviceName = data.getString("serviceName");
@@ -518,7 +519,17 @@ public class ToscaService {
 					for (int j = 0; j < nodes.getLength(); j++) {
 						log.debug(nodes.item(j).getNodeName());
 						if (nodes.item(j).getNodeName().equals("DeploymentArtifacts")) {
-							nodeTemplate.appendChild(nodes.item(j).cloneNode(true));
+							Element depArts = this.definitionTemplate.createElement("DeploymentArtifacts");
+							for (int k = 0; k < nodes.item(j).getChildNodes().getLength(); k++) {
+								Node templNode = nodes.item(j).getChildNodes().item(k);
+								Element depArt = this.definitionTemplate.createElement("DeploymentArtifact");
+								depArt.setAttribute("name", templNode.getAttributes().getNamedItem("name").getNodeValue());
+								depArt.setAttribute("artifactType", templNode.getAttributes().getNamedItem("artifactType").getNodeValue());
+								depArt.setAttribute("artifactRef", templNode.getAttributes().getNamedItem("artifactRef").getNodeValue());
+								depArts.appendChild(depArt);
+								
+							} 
+							nodeTemplate.appendChild(depArts);
 
 						}
 
@@ -538,6 +549,15 @@ public class ToscaService {
 		log.debug(this.definitionTemplate.saveXML(null));
 		// cycle in the nodes
 
+		try {
+			FileUtils.writeStringToFile(new File(destDir), this.definitionTemplate.saveXML(null));
+		} catch (DOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
