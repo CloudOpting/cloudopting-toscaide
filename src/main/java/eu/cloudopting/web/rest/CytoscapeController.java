@@ -52,6 +52,7 @@ public class CytoscapeController {
 			e.printStackTrace();
 		}
 		/*/
+		/*
 		JSONArray jret = null;
 		try {
 			jret = new JSONArray("['hostedon','link']");
@@ -61,7 +62,10 @@ public class CytoscapeController {
 		}
 		
 		String ret = jret.toString();
-		return ret;
+		return ret;*/
+		JSONArray ret = new JSONArray(toscaService.getEdgeTypeList());
+		log.debug(ret.toString());
+		return ret.toString();
 
 	}
 	

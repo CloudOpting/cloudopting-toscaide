@@ -237,10 +237,12 @@ angular
 							title : "Save"
 						} ];
 
+						
+						// TODO if there is already a model use that one
 						$scope.model = {};
 						$scope.$broadcast('schemaFormRedraw');
-						$scope.$broadcast('schemaFormRedraw');
-						
+//						$scope.$broadcast('schemaFormRedraw');
+						$scope.$apply();	
 					};
 
 

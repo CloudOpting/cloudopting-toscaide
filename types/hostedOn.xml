@@ -1,4 +1,2 @@
 <RelationshipType name="hostedOn">
-		<documentation></documentation>
-		<PropertiesDefinition element="QName" type="QName" />
-	</RelationshipType>
+</RelationshipType>

@@ -86,6 +86,9 @@ public class ToscaService {
 	private ArrayList<String> nodeTypeList;
 	private JSONObject nodeJsonList;
 	private JSONObject nodeJsonTypeList;
+	private ArrayList<String> edgeTypeList;
+	private JSONObject edgeJsonList;
+	private JSONObject edgeJsonTypeList;
 	private DocumentImpl definitionTemplate;
 	private DocumentImpl documentTypes;
 
@@ -259,6 +262,7 @@ public class ToscaService {
 			e1.printStackTrace();
 		}
 
+		// MANAGE NODES
 		DTMNodeList nodes = null;
 		try {
 			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType", this.documentTypes, XPathConstants.NODESET);
@@ -329,18 +333,19 @@ public class ToscaService {
 
 				JSONObject[] objs = new JSONObject[] { capProps, props };
 				for (JSONObject obj : objs) {
-				    Iterator it = obj.keys();
-				    while (it.hasNext()) {
-				        String key = (String)it.next();
-				        mergedJSON.put(key, obj.get(key));
-				    }
+					Iterator it = obj.keys();
+					while (it.hasNext()) {
+						String key = (String) it.next();
+						mergedJSON.put(key, obj.get(key));
+					}
 				}
-/*				
-				mergedJSON = new JSONObject(props, JSONObject.getNames(props));
-				for (String crunchifyKey : JSONObject.getNames(capProps)) {
-					mergedJSON.put(crunchifyKey, capProps.get(crunchifyKey));
-				}*/
-				
+				/*
+				 * mergedJSON = new JSONObject(props,
+				 * JSONObject.getNames(props)); for (String crunchifyKey :
+				 * JSONObject.getNames(capProps)) { mergedJSON.put(crunchifyKey,
+				 * capProps.get(crunchifyKey)); }
+				 */
+
 				JSONObject template = new JSONObject("{\"type\":\"object\",\"title\":\"Node properties\"}");
 				template.put("properties", mergedJSON);
 
@@ -360,6 +365,29 @@ public class ToscaService {
 
 			// recover the property and read the xsd than generate a xml and
 			// with that generate the proper json
+		}
+
+		// MANAGE EDGES
+		DTMNodeList edges = null;
+		try {
+			edges = (DTMNodeList) this.xpath.evaluate("//Nodes/RelationshipType", this.documentTypes,
+					XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.debug(edges.toString());
+		this.edgeTypeList = new ArrayList<String>();
+		this.edgeJsonList = new JSONObject();
+		this.edgeJsonTypeList = new JSONObject();
+		// RelationshipType cycle
+		for (int i = 0; i < edges.getLength(); ++i) {
+//			log.debug(edges.item(i).getChildNodes().item(1).getNodeName());
+			String edgeName = edges.item(i).getAttributes().getNamedItem("name").getNodeValue();
+			log.debug(edgeName);
+			// recover the name and place into an array
+			this.edgeTypeList.add(edgeName);
+			
 		}
 
 	}
@@ -448,6 +476,11 @@ public class ToscaService {
 		return this.nodeTypeList;
 	}
 
+
+	public ArrayList<String> getEdgeTypeList() {
+		return this.edgeTypeList;
+	}
+
 	public JSONObject getNodeTypeJsonList() {
 		return this.nodeJsonList;
 	}
@@ -523,12 +556,15 @@ public class ToscaService {
 							for (int k = 0; k < nodes.item(j).getChildNodes().getLength(); k++) {
 								Node templNode = nodes.item(j).getChildNodes().item(k);
 								Element depArt = this.definitionTemplate.createElement("DeploymentArtifact");
-								depArt.setAttribute("name", templNode.getAttributes().getNamedItem("name").getNodeValue());
-								depArt.setAttribute("artifactType", templNode.getAttributes().getNamedItem("artifactType").getNodeValue());
-								depArt.setAttribute("artifactRef", templNode.getAttributes().getNamedItem("artifactRef").getNodeValue());
+								depArt.setAttribute("name",
+										templNode.getAttributes().getNamedItem("name").getNodeValue());
+								depArt.setAttribute("artifactType",
+										templNode.getAttributes().getNamedItem("artifactType").getNodeValue());
+								depArt.setAttribute("artifactRef",
+										templNode.getAttributes().getNamedItem("artifactRef").getNodeValue());
 								depArts.appendChild(depArt);
-								
-							} 
+
+							}
 							nodeTemplate.appendChild(depArts);
 
 						}
