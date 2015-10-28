@@ -387,6 +387,20 @@ public class ToscaService {
 			log.debug(edgeName);
 			// recover the name and place into an array
 			this.edgeTypeList.add(edgeName);
+			String color = edges.item(i).getAttributes().getNamedItem("color").getNodeValue();
+			String style = edges.item(i).getAttributes().getNamedItem("style").getNodeValue();
+
+			JSONObject data = new JSONObject();
+			try {
+				data.put("style", style);
+				data.put("color", color);
+				log.debug(data.toString());
+				this.edgeJsonList.put(edgeName, data);
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 

@@ -9,6 +9,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
             cyData: '=',
             cyEdges: '=',
             cyTemplates: '=',
+            cyEdgetemplates: '=',
             // controller function to be triggered when clicking on a node
             cyClick:'&'
         },
