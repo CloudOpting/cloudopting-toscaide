@@ -401,7 +401,7 @@ public class ToscaService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			log.debug(this.edgeJsonList.toString());
 		}
 
 	}

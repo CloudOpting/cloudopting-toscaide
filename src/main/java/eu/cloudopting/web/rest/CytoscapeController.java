@@ -42,7 +42,7 @@ public class CytoscapeController {
 
 	}
 	
-	@RequestMapping(value = "/nodeTypes", method = RequestMethod.GET)
+	@RequestMapping(value = "/edgeTypes", method = RequestMethod.GET)
 	@ResponseBody
 	public String getEdgesJsonList() {
 		log.debug("in edgeTypes");

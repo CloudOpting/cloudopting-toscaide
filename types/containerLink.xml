@@ -1,2 +1,2 @@
-<RelationshipType name="containerLink">
+<RelationshipType name="containerLink" style="dotted" color="#992222">
 </RelationshipType>
