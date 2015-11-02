@@ -3,12 +3,16 @@
 	<PropertiesDefinition element="ApacheVirtualHostProperties"
 		type="tApacheVirtualHostProperties" />
 </NodeType>
-<NodeTypeImplementation nodeType="ApacheVirtualHost" name="ApacheVirtualHostImpl">
+<NodeTypeImplementation nodeType="ApacheVirtualHost"
+	name="ApacheVirtualHostImpl">
 	<DeploymentArtifacts>
-		<DeploymentArtifact name="ApacheVirtualhostPT.ftl"
+		<DeploymentArtifact name="ApacheVirtualHostPT.ftl"
 			artifactType="PuppetTemplate" artifactRef="ApacheVirtualHostPT">
 		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <ArtifactTemplate type="PuppetTemplate" id="ApacheVirtualHostPT">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/ApacheVirtualHostPT.ftl"></ArtifactReference>
+	</ArtifactReferences>
 </ArtifactTemplate>

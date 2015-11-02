@@ -1,0 +1,18 @@
+<NodeType name="PostgreSQL" shape="ellipse" color="#332299">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="PostgreSQLProperties"
+		type="tPostgreSQLProperties" />
+</NodeType>
+<NodeTypeImplementation nodeType="PostgreSQL"
+	name="PostgreSQLImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="PostgreSQLPT.ftl"
+			artifactType="PuppetTemplate" artifactRef="PostgreSQLPT">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="PostgreSQLPT">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/PostgreSQLPT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>
