@@ -1,0 +1,12 @@
+<NodeType name="Apache" shape="ellipse" color="#332255">
+	<DerivedFrom typeRef="xs:QName" />
+	<PropertiesDefinition element="ApacheProperties"
+		type="tApacheProperties" />
+</NodeType>
+<NodeTypeImplementation nodeType="Apache" name="ApacheImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="ApachePT.ftl" artifactType="PuppetTemplate"
+			artifactRef="ApachePT">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>

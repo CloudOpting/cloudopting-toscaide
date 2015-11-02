@@ -143,6 +143,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                             'width': '5',
                             'target-arrow-shape': 'triangle',
                             'source-arrow-shape': 'none',
+                            'content': 'data(type)',
                             'line-color': 'data(color)',
                             'line-style': 'data(style)'
                         })

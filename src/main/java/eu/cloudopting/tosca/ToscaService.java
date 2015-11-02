@@ -69,6 +69,7 @@ import eu.cloudopting.tosca.utils.ToscaUtils;
 import jlibs.xml.sax.XMLDocument;
 import jlibs.xml.xsd.XSInstance;
 import jlibs.xml.xsd.XSParser;
+import scala.annotation.meta.getter;
 
 @Service
 public class ToscaService {
@@ -382,7 +383,7 @@ public class ToscaService {
 		this.edgeJsonTypeList = new JSONObject();
 		// RelationshipType cycle
 		for (int i = 0; i < edges.getLength(); ++i) {
-//			log.debug(edges.item(i).getChildNodes().item(1).getNodeName());
+			// log.debug(edges.item(i).getChildNodes().item(1).getNodeName());
 			String edgeName = edges.item(i).getAttributes().getNamedItem("name").getNodeValue();
 			log.debug(edgeName);
 			// recover the name and place into an array
@@ -490,7 +491,6 @@ public class ToscaService {
 		return this.nodeTypeList;
 	}
 
-
 	public ArrayList<String> getEdgeTypeList() {
 		return this.edgeTypeList;
 	}
@@ -516,6 +516,7 @@ public class ToscaService {
 					.setTextContent(serviceName);
 
 			JSONArray nodeArr = data.getJSONArray("nodes");
+			JSONArray edgeArr = data.getJSONArray("edges");
 			log.debug("the original JSON string");
 			log.debug(this.nodeJsonTypeList.toString());
 			for (int i = 0; i < nodeArr.length(); i++) {
@@ -570,18 +571,24 @@ public class ToscaService {
 					for (int j = 0; j < nodes.getLength(); j++) {
 						log.debug(nodes.item(j).getNodeName());
 						if (nodes.item(j).getNodeName().equals("DeploymentArtifacts")) {
+
 							Element depArts = this.definitionTemplate.createElement("DeploymentArtifacts");
 							for (int k = 0; k < nodes.item(j).getChildNodes().getLength(); k++) {
-								Node templNode = nodes.item(j).getChildNodes().item(k);
-								Element depArt = this.definitionTemplate.createElement("DeploymentArtifact");
-								depArt.setAttribute("name",
-										templNode.getAttributes().getNamedItem("name").getNodeValue());
-								depArt.setAttribute("artifactType",
-										templNode.getAttributes().getNamedItem("artifactType").getNodeValue());
-								depArt.setAttribute("artifactRef",
-										templNode.getAttributes().getNamedItem("artifactRef").getNodeValue());
-								depArts.appendChild(depArt);
 
+								Node templNode = nodes.item(j).getChildNodes().item(k);
+								log.debug(templNode.getNodeName());
+								if (templNode.getNodeName().equals("DeploymentArtifact")) {
+									Element depArt = this.definitionTemplate.createElement("DeploymentArtifact");
+									log.debug(String.valueOf(templNode.getAttributes().getLength()));
+									log.debug(templNode.toString());
+									// depArt.setAttribute("name",
+									// templNode.getAttributes().getNamedItem("name").getNodeValue());
+									depArt.setAttribute("artifactType",
+											templNode.getAttributes().getNamedItem("artifactType").getNodeValue());
+									depArt.setAttribute("artifactRef",
+											templNode.getAttributes().getNamedItem("artifactRef").getNodeValue());
+									depArts.appendChild(depArt);
+								}
 							}
 							nodeTemplate.appendChild(depArts);
 
@@ -595,6 +602,38 @@ public class ToscaService {
 
 				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(nodeTemplate);
 
+			}
+			// MANAGE Relationship
+			for (int i = 0; i < edgeArr.length(); i++) {
+				JSONObject theEdge = edgeArr.getJSONObject(i);
+				String edgeType = theEdge.getString("type");
+				String edgeId = theEdge.getString("id");
+				String edgeSource = theEdge.getString("source");
+				String edgeTarget = theEdge.getString("target");
+				Element edgeTemplate = this.definitionTemplate.createElement("RelationshipTemplate");
+				edgeTemplate.setAttribute("id", edgeId);
+				edgeTemplate.setAttribute("type", edgeType);
+				Element sourceElement = this.definitionTemplate.createElement("SourceElement");
+				String refSource = null;
+				for (int j = 0; j < nodeArr.length(); j++) {
+					if (nodeArr.getJSONObject(j).getInt("id")==Integer.parseInt(edgeSource)){
+						refSource = nodeArr.getJSONObject(j).getString("name");
+						break;
+					}
+				}
+				sourceElement.setAttribute("ref", refSource);
+				Element targetElement = this.definitionTemplate.createElement("TargetElement");
+				String refTarget = null;
+				for (int j = 0; j < nodeArr.length(); j++) {
+					if (nodeArr.getJSONObject(j).getInt("id")==Integer.parseInt(edgeTarget)){
+						refTarget = nodeArr.getJSONObject(j).getString("name");
+						break;
+					}
+				}
+				targetElement.setAttribute("ref", refTarget);
+				edgeTemplate.appendChild(sourceElement);
+				edgeTemplate.appendChild(targetElement);
+				this.definitionTemplate.getElementsByTagName("TopologyTemplate").item(0).appendChild(edgeTemplate);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

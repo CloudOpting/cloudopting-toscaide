@@ -8,10 +8,84 @@
 	<xs:complexType name="formData">
 		<xs:attribute name="label"></xs:attribute>
 	</xs:complexType>
-
+	<xs:complexType name="tVMports">
+		<xs:sequence>
+			<xs:element name="VMport" minOccurs="0" maxOccurs="unbounded"
+				type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="tcpu">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="1" />
+			<xs:enumeration value="2" />
+			<xs:enumeration value="4" />
+			<xs:enumeration value="6" />
+			<xs:enumeration value="8" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tdisk">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="5" />
+			<xs:enumeration value="10" />
+			<xs:enumeration value="15" />
+			<xs:enumeration value="20" />
+			<xs:enumeration value="30" />
+			<xs:enumeration value="40" />
+			<xs:enumeration value="50" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tram">
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="512" />
+			<xs:enumeration value="1024" />
+			<xs:enumeration value="2048" />
+			<xs:enumeration value="4096" />
+			<xs:enumeration value="6144" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tVMhostProperties">
+		<xs:sequence>
+			<xs:element name="cpu">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="tcpu">
+							<xs:attribute name="title" fixed="CPU"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum" fixed="['1','2','4']"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ram">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="tcpu">
+							<xs:attribute name="title" fixed="RAM"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum"
+								fixed="['512','1024','2048','4096','6144']"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="disk">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="tdisk">
+							<xs:attribute name="title" fixed="Disk in GB"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum"
+								fixed="['5','10','15','20','30','40','50']"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="VMhostProperties" type="tVMhostProperties" />
 	<xs:complexType name="tDockerContainerProperties">
 		<xs:sequence>
-			<xs:element name="from">
+			<xs:element name="image">
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
@@ -71,6 +145,51 @@
 		<xs:attribute name="formtype" fixed="array"></xs:attribute>
 	</xs:complexType>
 	<xs:element name="DockerContainerPortsCaps" type="tDockerContainerPortsCaps" />
+	<xs:complexType name="tApacheProperties">
+		<xs:sequence>
+			<xs:element name="default_mods">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:boolean">
+							<xs:attribute name="title" fixed="Has default modules?"></xs:attribute>
+							<xs:attribute name="formtype" fixed="boolean"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="default_vhost">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:boolean">
+							<xs:attribute name="title" fixed="Has default vhost?"></xs:attribute>
+							<xs:attribute name="formtype" fixed="boolean"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="servername">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Server name (fqdn)"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="log_formats">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Log format"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ApacheProperties" type="tApacheProperties" />
 	<xs:complexType name="tSLA">
 		<xs:sequence>
 			<xs:element default="1" name="NumCpus">
@@ -132,53 +251,6 @@
 				type="tSLA" />
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="tVMports">
-		<xs:sequence>
-			<xs:element name="VMport" minOccurs="0" maxOccurs="unbounded"
-				type="xs:int" />
-		</xs:sequence>
-	</xs:complexType>
-	<xs:simpleType name="tcpu">
-		<xs:restriction base="xs:int">
-			<xs:enumeration value="1" />
-			<xs:enumeration value="2" />
-			<xs:enumeration value="4" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="tram">
-		<xs:restriction base="xs:int">
-			<xs:enumeration value="512" />
-			<xs:enumeration value="1024" />
-			<xs:enumeration value="2048" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:complexType name="tVMhostProperties">
-		<xs:sequence>
-			<xs:element name="cpu">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="tcpu">
-							<xs:attribute name="title" fixed="CPU"></xs:attribute>
-							<xs:attribute name="formtype" fixed="string"></xs:attribute>
-							<xs:attribute name="enum" fixed="['1','2','4']"></xs:attribute>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="ram">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="tcpu">
-							<xs:attribute name="title" fixed="RAM"></xs:attribute>
-							<xs:attribute name="formtype" fixed="string"></xs:attribute>
-							<xs:attribute name="enum" fixed="['512','1024','2048']"></xs:attribute>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:element name="VMhostProperties" type="tVMhostProperties" />
 
 	<xs:complexType name="tCustomizationProperty">
 		<xs:sequence>

@@ -159,6 +159,16 @@ angular
 						$rootScope.$broadcast('appChanged');
 
 					});
+					
+					$http.get('/api/edgeTypes').then(function data(response) {
+						console.debug('called edgeTypes');
+						console.debug(response);
+						$scope.templateEdgeData = response.data;
+						console.debug($scope.templateEdgeData);
+						$rootScope.$broadcast('appChanged');
+
+					});
+
 
 					// add object from the form then broadcast event which
 					// triggers the
@@ -203,7 +213,8 @@ angular
 						var newEdge = {
 							id : 'e' + ($scope.edgeData.length),
 							source : edge1,
-							target : edge2
+							target : edge2,
+							type   : $scope.formEdges.type
 						};
 						// adding the new edge object to the adges array
 						$scope.edgeData.push(newEdge);
