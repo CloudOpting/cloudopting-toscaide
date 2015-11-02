@@ -5,8 +5,18 @@
 </NodeType>
 <NodeTypeImplementation nodeType="Apache" name="ApacheImpl">
 	<DeploymentArtifacts>
-		<DeploymentArtifact name="ApachePT.ftl" artifactType="PuppetTemplate"
-			artifactRef="ApachePT">
+		<DeploymentArtifact name="ApachePT.ftl"
+			artifactType="PuppetTemplate" artifactRef="ApachePT">
 		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="ApachePT">
+</ArtifactTemplate>
+<ArtifactTemplate type="PuppetModule" id="ApachePM">
+	<Properties xmlns:co="http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes">
+		<co:PuppetModuleProperties>
+			<co:module>apache</co:module>
+			<co:git>https://github.com/puppetlabs/puppetlabs-apache</co:git>
+		</co:PuppetModuleProperties>
+	</Properties>
+</ArtifactTemplate>

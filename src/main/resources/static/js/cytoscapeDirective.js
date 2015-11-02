@@ -50,7 +50,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                 scope.elements = {};
                 scope.elements.nodes = [];
                 scope.elements.edges = [];
-
+console.debug(scope.elements.nodes);
                 // parse edges
                 // you can build a complete object in the controller and pass it without rebuilding it in the directive.
                 // doing it like that allows you to add options, design or what needed to the objects
@@ -111,7 +111,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                     // add new object to the Nodes array
                     scope.elements.nodes.push(elementObj);
                 }
-
+                console.debug(scope.elements.nodes);
                 // graph  initialization
                 // use object's properties as properties using: data(propertyName)
                 // check Cytoscapes site for much more data, options, designs etc
@@ -177,6 +177,7 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
                         // load the objects array
                         // use cy.add() / cy.remove() with passed data to add or remove nodes and edges without rebuilding the graph
                         // sample use can be adding a passed variable which will be broadcast on change
+                        console.debug(scope.elements);
                         cy.load(scope.elements);
                     }
                 });

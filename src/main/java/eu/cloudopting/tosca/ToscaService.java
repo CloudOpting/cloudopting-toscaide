@@ -266,7 +266,7 @@ public class ToscaService {
 		// MANAGE NODES
 		DTMNodeList nodes = null;
 		try {
-			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType", this.documentTypes, XPathConstants.NODESET);
+			nodes = (DTMNodeList) this.xpath.evaluate("//Nodes/NodeType|//Nodes/NodeTypeImplementation|//Nodes/ArtifactTemplate[@type='PuppetModule']", this.documentTypes, XPathConstants.NODESET);
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -514,6 +514,23 @@ public class ToscaService {
 					.setTextContent(serviceName);
 			this.definitionTemplate.getElementsByTagName("ServiceTemplate").item(0).getAttributes().getNamedItem("name")
 					.setTextContent(serviceName);
+			
+			// COPYING NodeTypes
+			String xPathNodeType = "//Nodes/NodeType";
+			DTMNodeList nodestypes = null;
+			try {
+				nodestypes = (DTMNodeList) this.xpath.evaluate(	xPathNodeType,
+								this.documentTypes, XPathConstants.NODESET);
+
+				for (int nt = 0; nt < nodestypes.getLength(); nt++) {
+					Node newNode = this.definitionTemplate.importNode(nodestypes.item(nt),true);
+					this.definitionTemplate.getElementsByTagName("Definitions").item(0).appendChild(newNode);
+				}
+				
+			}catch(XPathExpressionException e){
+				e.printStackTrace();
+			}
+			
 
 			JSONArray nodeArr = data.getJSONArray("nodes");
 			JSONArray edgeArr = data.getJSONArray("edges");
