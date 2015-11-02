@@ -1,5 +1,5 @@
 <NodeType name="Apache" shape="ellipse" color="#332255">
-	<DerivedFrom typeRef="xs:QName" />
+	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheProperties"
 		type="tApacheProperties" />
 </NodeType>

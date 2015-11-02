@@ -1,0 +1,14 @@
+<NodeType name="ApacheVirtualHost" shape="ellipse" color="#332299">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="ApacheVirtualHostProperties"
+		type="tApacheVirtualHostProperties" />
+</NodeType>
+<NodeTypeImplementation nodeType="ApacheVirtualHost" name="ApacheVirtualHostImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="ApacheVirtualhostPT.ftl"
+			artifactType="PuppetTemplate" artifactRef="ApacheVirtualHostPT">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="ApacheVirtualHostPT">
+</ArtifactTemplate>

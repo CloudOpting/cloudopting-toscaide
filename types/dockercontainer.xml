@@ -2,41 +2,12 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="DockerContainerProperties"
 		type="tDockerContainerProperties" />
-	<RequirementDefinitions>
-		<RequirementDefinition name="xs:string"
-			requirementType="xs:QName" lowerBound="xs:integer" upperBound="xs:integer | xs:string">
-			<Constraints>
-				<Constraint constraintType="xs:anyURI">
-					constraint type specific
-					content
-				</Constraint>
-			</Constraints>
-		</RequirementDefinition>
-	</RequirementDefinitions>
 	<CapabilityDefinitions>
 		<CapabilityDefinition capabilityType="DockerContainerPortsCaps" />
 	</CapabilityDefinitions>
-	<Interfaces>
-		<Interface name="ProjectInterface">
-			<Operation name="CreateProject">
-				<InputParameters>
-					<InputParameter name="ProjectName" type="xs:string" />
-					<InputParameter name="Owner" type="xs:string" />
-					<InputParameter name="AccountID" type="xs:string" />
-				</InputParameters>
-			</Operation>
-		</Interface>
-	</Interfaces>
 </NodeType>
-<NodeTypeImplementation nodeType="DockerContainer" name="DockerContainerImpl">
-	<ImplementationArtifacts>
-		<ImplementationArtifact artifactType="PuppetTemplate"
-			artifactRef="DockerContainerPT">
-		</ImplementationArtifact>
-		<ImplementationArtifact artifactType="DockerfileTemplate"
-			artifactRef="DockerContainerDT">
-		</ImplementationArtifact>
-	</ImplementationArtifacts>
+<NodeTypeImplementation nodeType="DockerContainer"
+	name="DockerContainerImpl">
 	<DeploymentArtifacts>
 		<DeploymentArtifact name="ClearoApacheDC.dockerfile"
 			artifactType="DockerfileTemplate" artifactRef="DockerContainerDT">
@@ -47,5 +18,18 @@
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <CapabilityType name="DockerContainerPortsCaps">
-	<PropertiesDefinition element="DockerContainerPortsCaps" type="tDockerContainerPortsCaps" />
+	<PropertiesDefinition element="DockerContainerPortsCaps"
+		type="tDockerContainerPortsCaps" />
 </CapabilityType>
+<ArtifactTemplate type="DockerfileTemplate" id="DockerContainerDT"
+	name="">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/DockerContainerDT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>
+<ArtifactTemplate type="PuppetTemplate" id="DockerContainerPT"
+	name="">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/DockerContainerPT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>
