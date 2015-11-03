@@ -1,0 +1,21 @@
+<NodeType name="MySQL" shape="ellipse" color="#332299">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="MySQLProperties"
+		type="tMySQLProperties" />
+	<CapabilityDefinitions>
+		<CapabilityDefinition capabilityType="portsExpose" />
+	</CapabilityDefinitions>
+</NodeType>
+<NodeTypeImplementation nodeType="MySQL"
+	name="MySQLImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="MySQLPT.ftl"
+			artifactType="PuppetTemplate" artifactRef="MySQLPT">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="MySQLPT">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/MySQLPT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>

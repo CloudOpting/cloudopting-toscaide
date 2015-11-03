@@ -1,0 +1,18 @@
+<NodeType name="MySQLDatabase" shape="ellipse" color="#332299">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="MySQLDatabaseProperties"
+		type="tMySQLDatabaseProperties" />
+</NodeType>
+<NodeTypeImplementation nodeType="MySQLDatabase"
+	name="MySQLDatabaseImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="MySQLDatabasePT.ftl"
+			artifactType="PuppetTemplate" artifactRef="MySQLDatabasePT">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="MySQLDatabasePT">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/MySQLDatabasePT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>

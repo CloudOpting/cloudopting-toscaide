@@ -2,6 +2,9 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheProperties"
 		type="tApacheProperties" />
+	<CapabilityDefinitions>
+		<CapabilityDefinition capabilityType="portsExpose" />
+	</CapabilityDefinitions>
 </NodeType>
 <NodeTypeImplementation nodeType="Apache" name="ApacheImpl">
 	<DeploymentArtifacts>

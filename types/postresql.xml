@@ -2,6 +2,9 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="PostgreSQLProperties"
 		type="tPostgreSQLProperties" />
+	<CapabilityDefinitions>
+		<CapabilityDefinition capabilityType="portsExpose" />
+	</CapabilityDefinitions>
 </NodeType>
 <NodeTypeImplementation nodeType="PostgreSQL"
 	name="PostgreSQLImpl">
