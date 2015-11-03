@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="MySQLDatabaseProperties"
 		type="tMySQLDatabaseProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
 <NodeTypeImplementation nodeType="MySQLDatabase"
 	name="MySQLDatabaseImpl">

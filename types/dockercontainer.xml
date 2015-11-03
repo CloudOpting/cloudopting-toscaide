@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="DockerContainerProperties"
 		type="tDockerContainerProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="writePuppetDockerTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 	<CapabilityDefinitions>
 		<CapabilityDefinition capabilityType="DockerContainerPortsCaps" />
 	</CapabilityDefinitions>

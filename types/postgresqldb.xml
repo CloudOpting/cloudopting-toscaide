@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="PostgreSQLDatabaseProperties"
 		type="tPostgreSQLDatabaseProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
 <NodeTypeImplementation nodeType="PostgreSQLDatabase"
 	name="PostgreSQLDatabaseImpl">

@@ -15,34 +15,6 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
         },
         link: function(scope, element, attrs, fn) {
             // dictionary of colors by types. Just to show some design options
-        	/*
-            scope.typeColors = {
-                'ellipse':'#992222',
-                'triangle':'#222299',
-                'rectangle':'#661199',
-                'roundrectangle':'#772244',
-                'pentagon':'#990088',
-                'hexagon':'#229988',
-                'heptagon':'#118844',
-                'octagon':'#335577',
-                'star':'#113355'
-            };
-			/*
-			scope.typeElements = {
-				'container': {'shape':'rectangle','color':'#992222','props':{'cpu':'2'}},
-				'application': {'shape':'pentagon','color':'#990088','props':{'cpu':'2'}},
-				'application-container': {'shape':'hexagon','color':'#118844','props':{'cpu':'2'}},
-				'host': {'shape':'roundrectangle','color':'#772244','props':{'cpu':'2'}}			
-			}
-			$http.get('/api/nodes').then(function data(response,scope){
-				console.debug('called api in directive');
-				console.debug(response);
-				scope.typeElements = response.data;
-				console.debug($scope.typeElements);
-				scope.doCy();
-				
-			})
-			*/
 
             // graph  build
             scope.doCy = function(){ // will be triggered on an event broadcast
@@ -89,14 +61,9 @@ console.debug(scope.elements.nodes);
                     // get id, name and type  from the object
                     var Oid = scope.cyData[i].id;
                     var Oname = scope.cyData[i].name;
-//                    var Otype = scope.cyData[i].type;
 					var Otype = scope.cyData[i].type;
 					var Oshape = scope.cyTemplates[Otype].shape;
 					var Oprops = scope.cyTemplates[Otype].props;
-//					var Oshape = scope.typeElements[Otype].shape;
-//					var Oprops = scope.typeElements[Otype].props;
-                    // get color from the object-color dictionary
-//                    var typeColor = scope.typeColors[Otype];
 					var typeColor = scope.cyTemplates[Otype].color;
                     // build the object, add or change properties as you need - just have a name and id
                     var elementObj = {
@@ -119,7 +86,7 @@ console.debug(scope.elements.nodes);
                 // here are just some basic options
                 $('#cy').cytoscape({
                     layout: {
-                        name: 'circle',
+                        name: 'breadthfirst',
                         fit: true, // whether to fit the viewport to the graph
                         ready: undefined, // callback on layoutready
                         stop: undefined, // callback on layoutstop

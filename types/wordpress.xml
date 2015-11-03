@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="WordpressProperties"
 		type="tWordpressProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
 <NodeTypeImplementation nodeType="Wordpress"
 	name="WordpressImpl">

@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheVirtualHostProperties"
 		type="tApacheVirtualHostProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
 <NodeTypeImplementation nodeType="ApacheVirtualHost"
 	name="ApacheVirtualHostImpl">

@@ -35,3 +35,5 @@ wro:
   postProcessors: cssVariables,cssMinJawr,jsMin
   resourceWatcherUpdatePeriod: 0
   ignoreMissingResources: false
+server:
+  address: 0.0.0.0

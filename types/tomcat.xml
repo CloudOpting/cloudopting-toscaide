@@ -1,7 +1,7 @@
-<NodeType name="MySQL" shape="ellipse" color="#332299">
+<NodeType name="Tomcat" shape="ellipse" color="#332299">
 	<DerivedFrom typeRef="root" />
-	<PropertiesDefinition element="MySQLProperties"
-		type="tMySQLProperties" />
+	<PropertiesDefinition element="TomcatProperties"
+		type="tTomcatProperties" />
 	<Interfaces>
 		<Interface name="Install">
 			<Operation name="compilePuppetTemplateHierarchy"></Operation>
@@ -11,15 +11,15 @@
 		<CapabilityDefinition capabilityType="portsExpose" />
 	</CapabilityDefinitions>
 </NodeType>
-<NodeTypeImplementation nodeType="MySQL" name="MySQLImpl">
+<NodeTypeImplementation nodeType="Tomcat" name="TomcatImpl">
 	<DeploymentArtifacts>
-		<DeploymentArtifact name="MySQLPT.ftl"
-			artifactType="PuppetTemplate" artifactRef="MySQLPT">
+		<DeploymentArtifact name="TomcatPT.ftl"
+			artifactType="PuppetTemplate" artifactRef="TomcatPT">
 		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
-<ArtifactTemplate type="PuppetTemplate" id="MySQLPT">
+<ArtifactTemplate type="PuppetTemplate" id="TomcatPT">
 	<ArtifactReferences>
-		<ArtifactReference reference="Templates/MySQLPT.ftl"></ArtifactReference>
+		<ArtifactReference reference="Templates/TomcatPT.ftl"></ArtifactReference>
 	</ArtifactReferences>
 </ArtifactTemplate>

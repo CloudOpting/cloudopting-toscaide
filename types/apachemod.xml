@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheModuleProperties"
 		type="tApacheModuleProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 </NodeType>
 <NodeTypeImplementation nodeType="ApacheModule"
 	name="ApacheModuleImpl">

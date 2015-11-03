@@ -2,6 +2,11 @@
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="PostgreSQLProperties"
 		type="tPostgreSQLProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
 	<CapabilityDefinitions>
 		<CapabilityDefinition capabilityType="portsExpose" />
 	</CapabilityDefinitions>
