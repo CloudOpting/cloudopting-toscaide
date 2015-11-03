@@ -1,12 +1,13 @@
 <h1>Greeting</h1>
 <div ng-show="authenticated">
-	<p>The ID is {{greeting.id}}</p>
-	<p>The content is {{greeting.content}}</p>
+	<p> {{greeting.id}}</p>
+	<p> {{greeting.content}}</p>
 </div>
 <div ng-show="!authenticated">
-	<p>Login to see your greeting!</p>
+	<p></p>
 </div>
 <div class="col-md-12" ng-controller="CytoscapeCtrl">
+Service name:<input	ng-model="serviceName" /><button ng-click="sendService()">Send nodes</button>
 	<div class="panel panel-default">
 		<div class="row outer">
 			<div id="content" class="col-md-6">
@@ -26,8 +27,7 @@
 						<option value="">To >></option>
 				</select>
 				<select ng-model="formEdges.type"
-					ng-options="name for name in formArr"></select><input
-					ng-model="formEdges.type" />
+					ng-options="name for name in formArr"></select>
 					<button ng-click="addEdge()">Add edge</button>
 				</span>
 				<hr>
@@ -37,13 +37,13 @@
 			</div>
 			<div class="col-md-6">
 				<div>
-					<span>Form</span>
+					<span>Node data form</span>
 
 					<form name="myForm" sf-schema="schema" sf-form="form"
 						sf-model="model" ng-submit="onSubmit(myForm)"></form>
 				</div>
 
-				<button ng-click="sendService()">Send nodes</button>
+				
 
 			</div>
 		</div>

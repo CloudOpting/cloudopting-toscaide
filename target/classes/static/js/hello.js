@@ -300,7 +300,7 @@ console.debug($scope.mapData[$scope.workingNode]);
 						var data = JSON.stringify({
 							nodes: $scope.mapData,
 							edges: $scope.edgeData,
-							serviceName: "service"
+							serviceName: $scope.serviceName
 						});
 						
 						$http({url:"/api/sendData",data:data,
