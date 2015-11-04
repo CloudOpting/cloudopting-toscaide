@@ -559,7 +559,7 @@ public class ToscaService {
 						JSONObject proDesc = new JSONObject();
 						JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties")
 								.getJSONObject(aProp);
-						String xpath = "//NodeTemplate[@id='" + nodeId + "']/Properties/co:" + propertyName + "/co:"
+						String xpath = "//ns:NodeTemplate[@id='" + nodeId + "']/ns:Properties/co:" + propertyName + "/co:"
 								+ aProp;
 						proDesc.put(aProp, new JSONObject().put("form", proInfo).put("xpath", xpath));
 						log.debug(xpath);
