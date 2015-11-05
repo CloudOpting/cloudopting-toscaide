@@ -92,6 +92,7 @@ public class ToscaService {
 	private JSONObject edgeJsonTypeList;
 	private DocumentImpl definitionTemplate;
 	private DocumentImpl documentTypes;
+	private JSONObject nodeTypePropList;
 
 	@Autowired
 	private ToscaUtils toscaUtils;
@@ -276,11 +277,13 @@ public class ToscaService {
 		this.nodeJsonList = new JSONObject();
 		this.nodeJsonTypeList = new JSONObject();
 
+		this.nodeTypePropList = new JSONObject();
 		// NodeType cycle
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			log.debug(nodes.item(i).getChildNodes().item(1).getNodeName());
 			String nodeName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
 			log.debug(nodeName);
+			
 			// recover the name and place into an array
 			this.nodeTypeList.add(nodeName);
 			String color = nodes.item(i).getAttributes().getNamedItem("color").getNodeValue();
@@ -303,7 +306,7 @@ public class ToscaService {
 					log.debug(element);
 					log.debug(xsdType);
 					String xmlModel = readXsd(element);
-					props = createFormObject(element, xmlModel);
+					props = createFormObject(element, xmlModel,nodeName,"property");
 					theProperty = element;
 				} else if (childNode.equals("CapabilityDefinitions")) {
 					log.debug("matched CapabilityDefinitions");
@@ -322,7 +325,7 @@ public class ToscaService {
 					log.debug(elCapProp);
 					String xmlCapModel = readXsd(elCapProp);
 					log.debug(xmlCapModel);
-					capProps = createFormObject(elCapProp, xmlCapModel);
+					capProps = createFormObject(elCapProp, xmlCapModel,nodeName,"capability");
 					log.debug(capProps.toString());
 
 				}
@@ -367,7 +370,8 @@ public class ToscaService {
 			// recover the property and read the xsd than generate a xml and
 			// with that generate the proper json
 		}
-
+log.debug("the prop list -------------------");
+log.debug(this.nodeTypePropList.toString());
 		// MANAGE EDGES
 		DTMNodeList edges = null;
 		try {
@@ -407,7 +411,7 @@ public class ToscaService {
 
 	}
 
-	private JSONObject createFormObject(String element, String doc) {
+	private JSONObject createFormObject(String element, String doc, String nodeName, String propertyType) {
 		log.debug("in createFormObject con: " + element);
 		JSONObject returnObj = new JSONObject();
 		JSONObject props = null;
@@ -421,7 +425,22 @@ public class ToscaService {
 					.getNamedItem("formtype");
 			String parentFormType = null;
 			// get the props of the element
-			props = processProperties(document);
+	/*		boolean setParent = true;
+			if (parentFormTypeNode != null) {
+				log.debug("the parent node has a formtype");
+				parentFormType = parentFormTypeNode.getNodeValue();
+				String parentFormTitle = document.getElementsByTagName(element).item(0).getAttributes()
+						.getNamedItem("formtype").getNodeValue();
+				switch (parentFormType) {
+				case "array":
+					setParent = false;
+					break;
+
+				default:
+					break;
+				}
+			}*/
+			props = processProperties(document, nodeName, propertyType,element);
 			log.debug(props.toString());
 			if (parentFormTypeNode != null) {
 				log.debug("the parent node has a formtype");
@@ -450,13 +469,23 @@ public class ToscaService {
 		return returnObj;
 	}
 
-	private JSONObject processProperties(DocumentImpl document) throws XPathExpressionException, JSONException {
+	private JSONObject processProperties(DocumentImpl document, String nodeName, String propertyType, String propertyTypeName) throws XPathExpressionException, JSONException {
 		DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("//*/*", document, XPathConstants.NODESET);
 		JSONObject props = new JSONObject();
+		JSONObject propsList = new JSONObject();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			String name = nodes.item(i).getNodeName();
 			log.debug(name);
+			switch (propertyType) {
+			case "capability":
+				propsList.append(propertyTypeName, name);
+				break;
+			default:
+				propsList.append(propertyType, name);
+				break;
+			}
 
+			
 			String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
 			log.debug(title);
 			String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
@@ -483,7 +512,20 @@ public class ToscaService {
 			form.put("title", title);
 			form.put("type", formtype);
 			props.put(name, form);
+	
 		}
+		switch (propertyType) {
+		case "capability":
+			JSONObject cap = new JSONObject();
+			cap.append(propertyType, propsList);
+			this.nodeTypePropList.append(nodeName, cap);
+			break;
+
+		default:
+			this.nodeTypePropList.append(nodeName, propsList);
+			break;
+		}
+		
 		return props;
 	}
 
@@ -540,6 +582,8 @@ public class ToscaService {
 				JSONObject theNode = nodeArr.getJSONObject(i);
 				String nodeType = theNode.getString("type");
 				String nodeId = theNode.getString("name");
+				log.debug("nodeType:"+nodeType);
+				log.debug("nodeId:"+nodeId);
 				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
 				Element properties = this.definitionTemplate.createElement("Properties");
 				String propertyName = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"))
@@ -547,18 +591,50 @@ public class ToscaService {
 				Element thePropBlock = this.definitionTemplate.createElement("co:" + propertyName);
 				JSONObject model = theNode.getJSONObject("model");
 				JSONObject jsonType = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"));
+				log.debug(jsonType.toString());
+				
+				log.debug(this.nodeTypePropList.getJSONArray(nodeType).toString());
+//				log.debug(this.nodeTypePropList.getJSONArray(nodeType).gtoString());
+				
+				// here we need to go over all the effective data the the type require and check if we have a value for it
+				for (int n=0; n < this.nodeTypePropList.getJSONArray(nodeType).length(); n++){
+					JSONObject proSet = this.nodeTypePropList.getJSONArray(nodeType).getJSONObject(n);
+					log.debug(proSet.toString());
+					String propKey = proSet.keys().next().toString();
+					log.debug(propKey);
+					switch (propKey) {
+					case "capability":
+						
+						break;
 
+					default:
+						for (int p=0; p< proSet.getJSONArray(propKey).length();p++){
+							String theProp = proSet.getJSONArray(propKey).getString(p);
+							log.debug(theProp);
+						}
+						break;
+					}
+					
+				}
+				
+				
+				
+				
+				
 				Iterator allProps = model.keys();
 				while (allProps.hasNext()) {
 					String aProp = (String) allProps.next();
 					log.debug(aProp);
+					log.debug(jsonType.toString());
 
 					Element aNodeProp = this.definitionTemplate.createElement("co:" + aProp);
 					String proVal = model.getString(aProp);
-					if (proVal.equals("userinput")) {
+					if (proVal.equals("%%USERINPUT%%")) {
 						JSONObject proDesc = new JSONObject();
 						JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties")
 								.getJSONObject(aProp);
+						log.debug("proInfo:"+proInfo.toString());
+						
 						String xpath = "//ns:NodeTemplate[@id='" + nodeId + "']/ns:Properties/co:" + propertyName + "/co:"
 								+ aProp;
 						proDesc.put(aProp, new JSONObject().put("form", proInfo).put("xpath", xpath));
