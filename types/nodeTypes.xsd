@@ -118,7 +118,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="DockerContainerProperties" type="tDockerContainerProperties" />
-	<xs:complexType name="tDockerContainerPortsCaps">
+	<xs:complexType name="tDockerContainerPorts">
 		<xs:sequence>
 			<xs:element name="host">
 				<xs:complexType>
@@ -141,8 +141,13 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="title" fixed="Command in the Dockerfile"></xs:attribute>
+		<xs:attribute name="title" fixed="Port mapping"></xs:attribute>
 		<xs:attribute name="formtype" fixed="array"></xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tDockerContainerPortsCaps">
+		<xs:sequence>
+			<xs:element name="DockerContainerPorts" type="tDockerContainerPorts"></xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="DockerContainerPortsCaps" type="tDockerContainerPortsCaps" />
 	<xs:complexType name="tApacheProperties">
@@ -453,7 +458,8 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Host from which comes connection"></xs:attribute>
+							<xs:attribute name="title"
+								fixed="Host from which comes connection"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -538,7 +544,8 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="MySQL version ('present', 'absent','x.y.z')"></xs:attribute>
+							<xs:attribute name="title"
+								fixed="MySQL version ('present', 'absent','x.y.z')"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>

@@ -470,12 +470,13 @@ log.debug(this.nodeTypePropList.toString());
 	}
 
 	private JSONObject processProperties(DocumentImpl document, String nodeName, String propertyType, String propertyTypeName) throws XPathExpressionException, JSONException {
-		DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("//*/*", document, XPathConstants.NODESET);
+		log.debug("in processProperties");
+		DTMNodeList nodes = (DTMNodeList) this.xpath.evaluate("/*/*", document, XPathConstants.NODESET);
 		JSONObject props = new JSONObject();
 		JSONObject propsList = new JSONObject();
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			String name = nodes.item(i).getNodeName();
-			log.debug(name);
+			log.debug("Property:"+name);
 			switch (propertyType) {
 			case "capability":
 				propsList.append(propertyTypeName, name);
@@ -487,31 +488,46 @@ log.debug(this.nodeTypePropList.toString());
 
 			
 			String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
-			log.debug(title);
+			log.debug("title:"+title);
 			String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
-			log.debug(formtype);
+			log.debug("formtype:"+formtype);
 			JSONObject form = new JSONObject();
-			// String selectEnum =
-			// nodes.item(i).getAttributes().getNamedItem("enum").getNodeValue();
-			Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
-			if (nodeEnum != null) {
-				form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
+			switch (formtype) { 
+				case "array":
+					// need to cycle in the node
+					JSONObject childprops = new JSONObject();
+					log.debug("/*/*/*");
+					DTMNodeList childnodes = (DTMNodeList) this.xpath.evaluate("/*/*/*", document, XPathConstants.NODESET);
+					log.debug(new Integer(childnodes.getLength()).toString());
+					for(int n=0; n < childnodes.getLength(); n++){
+						JSONObject childform = new JSONObject();
+						String childName = childnodes.item(n).getNodeName();
+						log.debug("Child Property:"+childName);
+						String childtitle = childnodes.item(n).getAttributes().getNamedItem("title").getNodeValue();
+						log.debug("title:"+childtitle);
+						String childformtype = childnodes.item(n).getAttributes().getNamedItem("formtype").getNodeValue();
+						log.debug("formtype:"+childformtype);
+						childform.put("title", childtitle);
+						childform.put("type", childformtype);
+						childprops.put(childName, childform);
+					}
+//					childprops.put(name, form);
+					JSONObject arr = new JSONObject("{\"type\":\"array\"}");
+					arr.put("items", new JSONObject().put("type", "object").put("properties", childprops));
+					props.put(name, arr);
+					break;
+				default:
+					Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
+					if (nodeEnum != null) {
+						form.put("enum", new JSONArray(nodeEnum.getNodeValue()));
+					}
+					form.put("title", title);
+					form.put("type", formtype);
+					props.put(name, form);
+					break;
 			}
-			/*
-			 * switch (formtype) { case "select": String titleMap =
-			 * nodes.item(i).getAttributes().getNamedItem("titleMap").
-			 * getNodeValue(); String selectType =
-			 * nodes.item(i).getAttributes().getNamedItem("selectType").
-			 * getNodeValue(); String selectEnum =
-			 * nodes.item(i).getAttributes().getNamedItem("enum").
-			 * getNodeValue(); form.put("titleMap", new JSONArray(titleMap));
-			 * break;
-			 * 
-			 * default: break; }
-			 */
-			form.put("title", title);
-			form.put("type", formtype);
-			props.put(name, form);
+			
+			
 	
 		}
 		switch (propertyType) {
@@ -586,6 +602,7 @@ log.debug(this.nodeTypePropList.toString());
 				log.debug("nodeId:"+nodeId);
 				Element nodeTemplate = this.definitionTemplate.createElement("NodeTemplate");
 				Element properties = this.definitionTemplate.createElement("Properties");
+				Element capabilities = this.definitionTemplate.createElement("Capabilities");
 				String propertyName = this.nodeJsonTypeList.getJSONObject(theNode.getString("type"))
 						.getString("propName");
 				Element thePropBlock = this.definitionTemplate.createElement("co:" + propertyName);
@@ -604,6 +621,33 @@ log.debug(this.nodeTypePropList.toString());
 					log.debug(propKey);
 					switch (propKey) {
 					case "capability":
+						// capability has an array og jsonobject with the properties os a cycle more
+						for (int c=0; c< proSet.getJSONArray(propKey).length();c++){
+							JSONObject aCap = proSet.getJSONArray(propKey).getJSONObject(c);
+							String capName = aCap.keys().next().toString();
+							log.debug(capName);
+							Element aNodeCap = this.definitionTemplate.createElement("co:" + capName);
+							Element capability = this.definitionTemplate.createElement("Capability");
+							Element capProperties = this.definitionTemplate.createElement("Properties");
+
+							capability.setAttribute("type", capName);
+							capability.setAttribute("id", "c"+c);
+							for (int p=0; p< aCap.getJSONArray(capName).length();p++){
+								String propName = aCap.getJSONArray(capName).getString(p);
+								log.debug(propName);
+								// now work on model
+//								model.
+								JSONArray capModel = model.getJSONArray(capName);
+								log.debug(capModel.toString());
+/*								for(int m = 0; m < capModel.getJSONArray(capName).length(); m++){
+									
+								}
+	*/							
+							}
+							capability.appendChild(capProperties);
+							capabilities.appendChild(capability);
+							
+						}
 						
 						break;
 
@@ -611,6 +655,29 @@ log.debug(this.nodeTypePropList.toString());
 						for (int p=0; p< proSet.getJSONArray(propKey).length();p++){
 							String theProp = proSet.getJSONArray(propKey).getString(p);
 							log.debug(theProp);
+							
+							
+							if(model.has(theProp)){
+								String propVal = model.getString(theProp);
+								Element aNodeProp = this.definitionTemplate.createElement("co:" + theProp);
+								if (propVal.equals("%%USERINPUT%%")) {
+									JSONObject proDesc = new JSONObject();
+									JSONObject proInfo = jsonType.getJSONObject("props").getJSONObject("properties")
+											.getJSONObject(theProp);
+									log.debug("proInfo:"+proInfo.toString());
+									
+									String xpath = "//ns:NodeTemplate[@id='" + nodeId + "']/ns:Properties/co:" + propertyName + "/co:"
+											+ theProp;
+									proDesc.put(theProp, new JSONObject().put("form", proInfo).put("xpath", xpath));
+									log.debug(xpath);
+									aNodeProp.appendChild(
+											this.definitionTemplate.createProcessingInstruction("userInput", proDesc.toString()));
+									
+								} else {
+									aNodeProp.appendChild(this.definitionTemplate.createTextNode(propVal));
+								}
+								thePropBlock.appendChild(aNodeProp);
+							}
 						}
 						break;
 					}
@@ -620,7 +687,7 @@ log.debug(this.nodeTypePropList.toString());
 				
 				
 				
-				
+/*				
 				Iterator allProps = model.keys();
 				while (allProps.hasNext()) {
 					String aProp = (String) allProps.next();
@@ -646,11 +713,12 @@ log.debug(this.nodeTypePropList.toString());
 					}
 					thePropBlock.appendChild(aNodeProp);
 				}
-
+*/
 				nodeTemplate.setAttribute("id", nodeId);
 				nodeTemplate.setAttribute("type", nodeType);
 				properties.appendChild(thePropBlock);
 				nodeTemplate.appendChild(properties);
+				nodeTemplate.appendChild(capabilities);
 
 				// Manage Artifacts
 				DTMNodeList nodes = null;
