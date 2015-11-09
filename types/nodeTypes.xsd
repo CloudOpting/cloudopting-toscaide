@@ -195,6 +195,12 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="ApacheProperties" type="tApacheProperties" />
+	<xs:complexType name="tportsExposeCaps">
+		<xs:sequence>
+			<xs:element name="portsExpose" type="tportsExpose"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="portsExposeCaps" type="tportsExposeCaps" />
 	<xs:complexType name="tportsExpose">
 		<xs:sequence>
 			<xs:element name="port">
@@ -211,7 +217,6 @@
 		<xs:attribute name="title" fixed="Listen ports"></xs:attribute>
 		<xs:attribute name="formtype" fixed="array"></xs:attribute>
 	</xs:complexType>
-	<xs:element name="portsExpose" type="tportsExpose" />
 	<xs:complexType name="tApacheVirtualHostProperties">
 		<xs:sequence>
 			<xs:element name="servername">

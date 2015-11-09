@@ -8,7 +8,7 @@
 		</Interface>
 	</Interfaces>
 	<CapabilityDefinitions>
-		<CapabilityDefinition capabilityType="portsExpose" />
+		<CapabilityDefinition capabilityType="portsExposeCaps" />
 	</CapabilityDefinitions>
 </NodeType>
 <NodeTypeImplementation nodeType="Tomcat" name="TomcatImpl">
