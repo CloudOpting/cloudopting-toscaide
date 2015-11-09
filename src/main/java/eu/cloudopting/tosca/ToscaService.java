@@ -477,21 +477,14 @@ log.debug(this.nodeTypePropList.toString());
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			String name = nodes.item(i).getNodeName();
 			log.debug("Property:"+name);
-			switch (propertyType) {
-			case "capability":
-				propsList.append(propertyTypeName, name);
-				break;
-			default:
-				propsList.append(propertyType, name);
-				break;
-			}
-
 			
+
 			String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
 			log.debug("title:"+title);
 			String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
 			log.debug("formtype:"+formtype);
 			JSONObject form = new JSONObject();
+			JSONObject xPropList = new JSONObject();
 			switch (formtype) { 
 				case "array":
 					// need to cycle in the node
@@ -510,11 +503,20 @@ log.debug(this.nodeTypePropList.toString());
 						childform.put("title", childtitle);
 						childform.put("type", childformtype);
 						childprops.put(childName, childform);
+						xPropList.append(name, childName);
 					}
 //					childprops.put(name, form);
 					JSONObject arr = new JSONObject("{\"type\":\"array\"}");
 					arr.put("items", new JSONObject().put("type", "object").put("properties", childprops));
 					props.put(name, arr);
+					switch (propertyType) {
+					case "capability":
+						propsList.append(propertyTypeName, xPropList);
+						break;
+					default:
+						propsList.append(propertyType, xPropList);
+						break;
+					}
 					break;
 				default:
 					Node nodeEnum = nodes.item(i).getAttributes().getNamedItem("enum");
@@ -524,6 +526,14 @@ log.debug(this.nodeTypePropList.toString());
 					form.put("title", title);
 					form.put("type", formtype);
 					props.put(name, form);
+					switch (propertyType) {
+					case "capability":
+						propsList.append(propertyTypeName, name);
+						break;
+					default:
+						propsList.append(propertyType, name);
+						break;
+					}
 					break;
 			}
 			
@@ -624,7 +634,8 @@ log.debug(this.nodeTypePropList.toString());
 						// capability has an array og jsonobject with the properties os a cycle more
 						for (int c=0; c< proSet.getJSONArray(propKey).length();c++){
 							JSONObject aCap = proSet.getJSONArray(propKey).getJSONObject(c);
-							String capName = aCap.keys().next().toString();
+							String capName = ((JSONObject)aCap).keys().next().toString();
+							
 							log.debug(capName);
 							Element aNodeCap = this.definitionTemplate.createElement("co:" + capName);
 							Element capability = this.definitionTemplate.createElement("Capability");
@@ -633,12 +644,42 @@ log.debug(this.nodeTypePropList.toString());
 							capability.setAttribute("type", capName);
 							capability.setAttribute("id", "c"+c);
 							for (int p=0; p< aCap.getJSONArray(capName).length();p++){
-								String propName = aCap.getJSONArray(capName).getString(p);
-								log.debug(propName);
+//								String propName = aCap.getJSONArray(capName).getString(p);
+								Object propName = aCap.getJSONArray(capName).get(p);
+								
+								
+//								String capName = new String(); 
+								if(propName instanceof JSONObject){
+									log.debug("the capability is an object");
+									String keyName = ((JSONObject)propName).keys().next().toString();
+									log.debug(keyName);
+									JSONArray capModel = model.getJSONArray(keyName);
+									log.debug(capModel.toString());
+									for(int cp=0; cp< capModel.length(); cp++){
+										JSONObject capObj = capModel.getJSONObject(cp);
+										Element capArr = this.definitionTemplate.createElement("co:"+keyName);
+										Iterator capIter = capObj.keys();
+										while(capIter.hasNext()){
+											String capModelPropName = capIter.next().toString();
+											String capModelPropVal = capObj.getString(capModelPropName);
+											log.debug("capModelPropName:"+capModelPropName);
+											log.debug("capModelPropVal:"+capModelPropVal);
+											Element capArrProp = this.definitionTemplate.createElement("co:"+capModelPropName);
+											capArrProp.appendChild(this.definitionTemplate.createTextNode(capModelPropVal));
+											capArr.appendChild(capArrProp);
+										}
+										capProperties.appendChild(capArr);
+									}
+								} else {
+									log.debug("the capability is a simple string");
+									log.debug((String)propName);
+									
+								}
+
 								// now work on model
 //								model.
-								JSONArray capModel = model.getJSONArray(capName);
-								log.debug(capModel.toString());
+//								JSONArray capModel = model.getJSONArray(capName);
+//								log.debug(capModel.toString());
 /*								for(int m = 0; m < capModel.getJSONArray(capName).length(); m++){
 									
 								}
