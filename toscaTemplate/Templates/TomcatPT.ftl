@@ -4,9 +4,9 @@ class { 'java':
 distribution => 'jdk',}
 
 tomcat::instance { '<#if tomcat?has_content>${tomcat}</#if>':
-<#if catalina_base?has_content>catalina_base => ${catalina_base},</#if>
-<#if catalina_home?has_content>catalina_home => ${catalina_home},</#if>
-<#if source_url?has_content>source_url => ${source_url},</#if>
+<#if catalina_base?has_content>catalina_base => '${catalina_base}',</#if>
+<#if catalina_home?has_content>catalina_home => '${catalina_home}',</#if>
+<#if source_url?has_content>source_url => '${source_url}',</#if>
 <#if install_from_source?has_content>install_from_source => ${install_from_source},</#if>
 }->
 tomcat::config::server { '<#if tomcat?has_content>${tomcat}</#if>':
@@ -28,16 +28,6 @@ tomcat::config::server::connector { '<#if tomcat?has_content>${tomcat}</#if>-ajp
 tomcat::service { 'default':
 <#if catalina_base?has_content>catalina_base => ${catalina_base},</#if>
 service_ensure => 'stopped',
-}->
-class{'liferay':
-<#if catalina_base?has_content>catalina_base => ${catalina_base},</#if>
-<#if catalina_home?has_content>catalina_home => ${catalina_home},</#if>
-<#if dbhost?has_content>dbhost => '${dbhost}',</#if>
-<#if dbname?has_content>dbname => '${dbname}',</#if>
-<#if dbuser?has_content>dbuser => '${dbuser}',</#if>
-<#if dbpass?has_content>dbpass => '${dbpass}',</#if>
-<#if wizard?has_content>wizard => ${wizard},</#if>
-<#if version?has_content>version => ${version},</#if>
 }
 
 <#foreach childTemplate in childtemplates>
