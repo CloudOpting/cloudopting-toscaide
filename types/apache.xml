@@ -16,6 +16,9 @@
 		<DeploymentArtifact name="ApachePT.ftl"
 			artifactType="PuppetTemplate" artifactRef="ApachePT">
 		</DeploymentArtifact>
+		<DeploymentArtifact artifactType="PuppetModule"
+			artifactRef="ApachePM">
+		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <ArtifactTemplate type="PuppetTemplate" id="ApachePT">

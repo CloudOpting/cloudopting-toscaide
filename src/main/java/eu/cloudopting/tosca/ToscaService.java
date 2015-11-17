@@ -592,6 +592,12 @@ log.debug(this.nodeTypePropList.toString());
 
 				for (int nt = 0; nt < nodestypes.getLength(); nt++) {
 					Node newNode = this.definitionTemplate.importNode(nodestypes.item(nt),true);
+					
+//					String strNode = this.documentTypes.saveXML(nodestypes.item(nt));
+//					strNode = strNode.replace("<?xml version=\"1.0\" encoding=\"UTF-16\"?>", "");
+//					log.debug(strNode);
+//					Node newNode = this.definitionTemplate.createElement(strNode);
+//					newNode.getAttributes().removeNamedItem("xmlns");
 					this.definitionTemplate.getElementsByTagName("Definitions").item(0).appendChild(newNode);
 				}
 				
@@ -841,11 +847,14 @@ log.debug(this.nodeTypePropList.toString());
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		log.debug(this.definitionTemplate.saveXML(null));
+		this.definitionTemplate.setXmlEncoding("UTF-8");
+//		log.debug(this.definitionTemplate.saveXML(null));
+		String finalModel = this.definitionTemplate.saveXML(null);
+		finalModel = finalModel.replace("xmlns=\"\"", "");
 		// cycle in the nodes
 
 		try {
-			FileUtils.writeStringToFile(new File(destDir), this.definitionTemplate.saveXML(null));
+			FileUtils.writeStringToFile(new File(destDir), finalModel);
 		} catch (DOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

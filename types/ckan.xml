@@ -13,6 +13,9 @@
 		<DeploymentArtifact name="CKANPT.ftl"
 			artifactType="PuppetTemplate" artifactRef="CKANPT">
 		</DeploymentArtifact>
+		<DeploymentArtifact artifactType="PuppetModule"
+			artifactRef="CKANPM">
+		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <ArtifactTemplate type="PuppetTemplate" id="CKANPT">

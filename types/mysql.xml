@@ -16,6 +16,9 @@
 		<DeploymentArtifact name="MySQLPT.ftl"
 			artifactType="PuppetTemplate" artifactRef="MySQLPT">
 		</DeploymentArtifact>
+		<DeploymentArtifact artifactType="PuppetModule"
+			artifactRef="MySQLPM">
+		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <ArtifactTemplate type="PuppetTemplate" id="MySQLPT">

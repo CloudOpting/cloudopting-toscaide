@@ -5,7 +5,6 @@
 	xsi:schemaLocation="http://docs.oasis-open.org/tosca/ns/2011/12 ../Types/TOSCA-v1.0.xsd http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes
 		../Types/CloudOptingTypes.xsd">
 	<ServiceTemplate id="" name="">
-
 		<TopologyTemplate>
 		</TopologyTemplate>
 		<ArtifactType name="PuppetTemplate">

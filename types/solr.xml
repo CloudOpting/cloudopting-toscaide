@@ -13,6 +13,9 @@
 		<DeploymentArtifact name="SolrPT.ftl"
 			artifactType="PuppetTemplate" artifactRef="SolrPT">
 		</DeploymentArtifact>
+		<DeploymentArtifact artifactType="PuppetModule"
+			artifactRef="SolrPM">
+		</DeploymentArtifact>
 	</DeploymentArtifacts>
 </NodeTypeImplementation>
 <ArtifactTemplate type="PuppetTemplate" id="SolrPT">
