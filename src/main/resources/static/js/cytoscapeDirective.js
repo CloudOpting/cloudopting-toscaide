@@ -11,7 +11,8 @@ angular.module('hello').directive('cytoscape', function($rootScope,$http) {
             cyTemplates: '=',
             cyEdgetemplates: '=',
             // controller function to be triggered when clicking on a node
-            cyClick:'&'
+            cyClick:'&',
+            cyEdgeclick:'&'
         },
         link: function(scope, element, attrs, fn) {
             // dictionary of colors by types. Just to show some design options
@@ -37,6 +38,7 @@ console.debug(scope.elements.nodes);
                     var eId = scope.cyEdges[i].id;
                     var eType = scope.cyEdges[i].type;
                     var eStyle = scope.cyEdgetemplates[eType].style;
+                    var eProps = scope.cyEdgetemplates[eType].props;
                     var eColor = scope.cyEdgetemplates[eType].color;
                     console.debug("edge type:" + scope.cyEdges[i].type);
                     // build the edge object
@@ -47,6 +49,7 @@ console.debug(scope.elements.nodes);
                         target:eTarget,
                         color:eColor,
                         style:eStyle,
+                        properties:eProps,
                         type: eType
                         }
                     };
@@ -139,6 +142,14 @@ console.debug(scope.elements.nodes);
                             var nodeId = evtTarget.id();
 							var nodeProps = evtTarget.data('properties');
                             scope.cyClick({value:{id:nodeId,props:nodeProps}});
+                        });
+
+                        cy.on('tap', 'edge', function(e){
+                        	console.debug("tapping on edge");
+                            var evtTarget = e.cyTarget;
+                            var edgeId = evtTarget.id();
+							var edgeProps = evtTarget.data('properties');
+                            scope.cyEdgeclick({value:{id:edgeId,props:edgeProps}});
                         });
 
                         // load the objects array

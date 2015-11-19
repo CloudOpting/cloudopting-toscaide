@@ -211,7 +211,7 @@ angular
 						// sample (you
 						// can do it any other way)
 						var newEdge = {
-							id : 'e' + ($scope.edgeData.length),
+							id : "e"+($scope.edgeData.length),
 							source : edge1,
 							target : edge2,
 							type   : $scope.formEdges.type
@@ -240,6 +240,7 @@ angular
 						console.debug($scope.schema);
 						$scope.schema = JSON.parse(JSON.stringify(value.props));
 						$scope.workingNode = value.id;
+						$scope.isFormNode = true;
 						console.debug('after'+$scope.schema);
 						console.debug($scope.schema);
 //						$scope.typeform.pop();
@@ -260,6 +261,33 @@ angular
 
 						$scope.$apply();	
 					};
+					
+					$scope.doEdgeClick = function(value) {
+						console.debug(value);
+						$scope.schema = JSON.parse(JSON.stringify(value.props));
+						$scope.workingEdge = value.id.substring(1);
+						$scope.isFormNode = false;
+						console.debug($scope.workingEdge);
+						console.debug('after'+$scope.schema);
+						console.debug($scope.schema);
+//						$scope.typeform.pop();
+						$scope.form = [ "*", {
+							type : "submit",
+							title : "Save"
+						} ];
+
+						console.debug("value.model");
+						console.debug($scope.edgeData[$scope.workingEdge].model);
+						
+						if (typeof $scope.edgeData[$scope.workingEdge].model == "undefined"){
+							$scope.model = {};	
+						}else{
+							$scope.model = $scope.edgeData[$scope.workingEdge].model;
+						}
+						$scope.$broadcast('schemaFormRedraw');
+
+						$scope.$apply();	
+					}
 
 
 					$scope.onSubmit = function(form) {
@@ -269,10 +297,17 @@ angular
 						console.debug("saving the model");		
 console.debug($scope.model);
 console.debug($scope.mapData);
+console.debug($scope.edgeData);
 console.debug($scope.workingNode);
+console.debug($scope.workingEdge);
 console.debug("the mapdata");
 console.debug($scope.mapData[$scope.workingNode]);
+console.debug($scope.edgeData[$scope.workingEdge]);
+if($scope.isFormNode){
 $scope.mapData[$scope.workingNode].model = $scope.model;
+}else{
+	$scope.edgeData[$scope.workingEdge].model = $scope.model;
+}
 console.debug($scope.mapData[$scope.workingNode]);
 						// Then we check if the form is valid
 						if (form.$valid) {

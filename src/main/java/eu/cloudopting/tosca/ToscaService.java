@@ -395,12 +395,48 @@ log.debug(this.nodeTypePropList.toString());
 			String color = edges.item(i).getAttributes().getNamedItem("color").getNodeValue();
 			String style = edges.item(i).getAttributes().getNamedItem("style").getNodeValue();
 
+			// managing properties for relationship
+			JSONObject props = new JSONObject();
+			String theProperty = null;
+			for (int j = 0; j < edges.item(i).getChildNodes().getLength(); ++j) {
+				log.debug(edges.item(i).getChildNodes().item(j).getNodeName());
+				String childNode = edges.item(i).getChildNodes().item(j).getNodeName();
+				if (childNode.equals("PropertiesDefinition")) {
+					log.debug("matched PropertiesDefinition for edges");
+					String element = edges.item(i).getChildNodes().item(j).getAttributes().getNamedItem("element")
+							.getNodeValue();
+					String xsdType = edges.item(i).getChildNodes().item(j).getAttributes().getNamedItem("type")
+							.getNodeValue();
+					log.debug(element);
+					log.debug(xsdType);
+					String xmlModel = readXsd(element);
+					props = createFormObject(element, xmlModel,edgeName,"property");
+					theProperty = element;
+				}
+			}
+			
+			JSONObject template = null;
+			try {
+				template = new JSONObject("{\"type\":\"object\",\"title\":\"Edge properties\"}");
+				template.put("properties", props);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+
+			
 			JSONObject data = new JSONObject();
+			JSONObject dataType = new JSONObject();
 			try {
 				data.put("style", style);
 				data.put("color", color);
+				data.put("props", template);
+				dataType.put("props", template);
+				dataType.put("propName", theProperty);
 				log.debug(data.toString());
 				this.edgeJsonList.put(edgeName, data);
+				this.edgeJsonTypeList.put(edgeName, dataType);
 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -720,6 +756,11 @@ log.debug(this.nodeTypePropList.toString());
 									aNodeProp.appendChild(
 											this.definitionTemplate.createProcessingInstruction("userInput", proDesc.toString()));
 									
+								} else if(propVal.startsWith("%%SERVPATH")){
+									log.debug(propVal);
+									String filename = propVal.substring(10, propVal.length()-2);
+									aNodeProp.appendChild(
+											this.definitionTemplate.createProcessingInstruction("servPath", filename));
 								} else {
 									aNodeProp.appendChild(this.definitionTemplate.createTextNode(propVal));
 								}

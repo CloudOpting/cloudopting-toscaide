@@ -711,11 +711,21 @@
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="catalina_home">
+			<xs:element name="name">
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Home folder"></xs:attribute>
+							<xs:attribute name="title" fixed="War name"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="war_source">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Souce location of the WAR"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -1169,6 +1179,31 @@
 		<xs:attribute name="Dest" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:element name="DockerVolumeProperty" type="tDockerVolumeProperty" />
+	<xs:complexType name="tvolumeFromProperties">
+		<xs:sequence>
+			<xs:element name="source">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Source"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="destination">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Destination"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="volumeFromProperties" type="tvolumeFromProperties" />
 
 
 
