@@ -620,7 +620,7 @@ log.debug(this.nodeTypePropList.toString());
 					.setTextContent(serviceName);
 			
 			// COPYING NodeTypes, NodeTypeImplementation, ArtifactTemplate
-			String xPathNodeType = "//Nodes/NodeType|//Nodes/NodeTypeImplementation|//Nodes/ArtifactTemplate";
+			String xPathNodeType = "//Nodes/NodeType|//Nodes/NodeTypeImplementation|//Nodes/ArtifactTemplate|//Nodes/RelationshipType";
 			DTMNodeList nodestypes = null;
 			try {
 				nodestypes = (DTMNodeList) this.xpath.evaluate(	xPathNodeType,
