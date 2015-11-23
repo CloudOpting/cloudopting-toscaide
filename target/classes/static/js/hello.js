@@ -327,7 +327,11 @@ console.debug($scope.mapData[$scope.workingNode]);
 					$scope.reset = function() {
 						$scope.mapData = [];
 						$scope.edgeData = [];
+//						$scope.$broadcast('schemaFormRedraw');
+						$scope.$apply();
 						$rootScope.$broadcast('appChanged');
+						
+						
 					}
 					
 					$scope.sendService = function (){
