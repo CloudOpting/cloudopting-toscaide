@@ -1,4 +1,4 @@
-<NodeType name="MySQLDatabase" shape="ellipse" color="#332299">
+<NodeType name="MySQLDatabase" shape="ellipse" color="#ffffff" image="mysqldb.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="MySQLDatabaseProperties"
 		type="tMySQLDatabaseProperties" />

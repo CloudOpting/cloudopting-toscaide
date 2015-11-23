@@ -1,4 +1,4 @@
-<NodeType name="CKAN" shape="ellipse" color="#332255">
+<NodeType name="CKAN" shape="ellipse" color="#ffffff" image="ckan.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="CKANProperties"
 		type="tCKANProperties" />

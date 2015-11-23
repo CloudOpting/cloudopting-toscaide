@@ -1,4 +1,4 @@
-<NodeType name="PostgreSQL" shape="ellipse" color="#332299">
+<NodeType name="PostgreSQL" shape="ellipse" color="#ffffff" image="postgresql.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="PostgreSQLProperties"
 		type="tPostgreSQLProperties" />

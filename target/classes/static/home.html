@@ -7,7 +7,7 @@
 	<p></p>
 </div>
 <div class="col-md-12" ng-controller="CytoscapeCtrl">
-Service name:<input	ng-model="serviceName" /><button ng-click="sendService()">Send nodes</button>
+Service name:<input	ng-model="serviceName" /><button ng-click="sendService()" ng-disabled="!serviceName.length">Send nodes</button><button ng-click="saveService()" ng-disabled="!serviceName.length">Save topology</button><button ng-click="loadTopology()" ng-disabled="!serviceName.length">Load topology</button>
 	<div class="panel panel-default">
 		<div class="row outer">
 			<div id="content" class="col-md-6">

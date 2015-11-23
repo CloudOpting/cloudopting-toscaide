@@ -346,4 +346,49 @@ console.debug($scope.mapData[$scope.workingNode]);
 							console.debug(status);
 						});
 					}
+					
+					$scope.saveService = function (){
+						console.debug("sending data for save");
+						var data = JSON.stringify({
+							nodes: $scope.mapData,
+							edges: $scope.edgeData,
+							serviceName: $scope.serviceName
+						});
+						
+						$http({url:"/api/saveData",data:data,
+							method:"POST",
+							headers:{"Content-Type": "text/plain",}
+							}).success(function(data, status){
+							console.debug(data);
+							console.debug(status);
+						});
+					}
+					$scope.loadTopology = function (){
+						console.debug("loading saved data");
+						var data = JSON.stringify({
+							serviceName: $scope.serviceName
+						});
+						
+						$http({url:"/api/loadTopology",data:data,
+							method:"POST",
+							headers:{"Content-Type": "text/plain",}
+							}).success(function(data, status){
+							console.debug(data);
+							console.debug(status);
+//							$scope.mapData = data.nodes;
+							data.nodes.forEach(function(entry) {
+							    console.log(entry);
+							    $scope.mapData.push(entry);
+							});
+							data.edges.forEach(function(entry) {
+							    console.log(entry);
+							    $scope.edgeData.push(entry);
+							});
+							console.debug(data.nodes);
+							console.debug($scope.mapData);
+//							$scope.edgeData = data.edges;
+							$rootScope.$broadcast('appChanged');
+						});
+					}
+
 				});

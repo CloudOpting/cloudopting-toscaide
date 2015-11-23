@@ -1,4 +1,4 @@
-<NodeType name="Cron" shape="ellipse" color="#332299">
+<NodeType name="Cron" shape="ellipse" color="#332299" image="docker.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="CronProperties"
 		type="tCronProperties" />

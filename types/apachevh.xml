@@ -1,4 +1,4 @@
-<NodeType name="ApacheVirtualHost" shape="ellipse" color="#332299">
+<NodeType name="ApacheVirtualHost" shape="ellipse" color="#ffffff" image="apachevh.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheVirtualHostProperties"
 		type="tApacheVirtualHostProperties" />

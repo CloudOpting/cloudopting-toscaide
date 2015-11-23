@@ -1,4 +1,4 @@
-<NodeType name="Solr" shape="ellipse" color="#332255">
+<NodeType name="Solr" shape="ellipse" color="#ffffff" image="solr.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="SolrProperties"
 		type="tSolrProperties" />

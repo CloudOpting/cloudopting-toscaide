@@ -1,4 +1,4 @@
-<NodeType name="VMHost" shape="rectangle" color="#992222">
+<NodeType name="VMHost" shape="rectangle" color="#ffffff" image="vmhost.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="VMhostProperties"
 		type="tVMhostProperties" />

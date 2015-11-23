@@ -1,4 +1,4 @@
-<NodeType name="Apache" shape="ellipse" color="#332255">
+<NodeType name="Apache" shape="ellipse" color="#ffffff" image="apache.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheProperties"
 		type="tApacheProperties" />

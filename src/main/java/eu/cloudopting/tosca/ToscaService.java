@@ -288,6 +288,7 @@ public class ToscaService {
 			this.nodeTypeList.add(nodeName);
 			String color = nodes.item(i).getAttributes().getNamedItem("color").getNodeValue();
 			String shape = nodes.item(i).getAttributes().getNamedItem("shape").getNodeValue();
+			String image = nodes.item(i).getAttributes().getNamedItem("image").getNodeValue();
 			// JSONObject jret = new JSONObject();
 			JSONObject data = new JSONObject();
 			JSONObject dataType = new JSONObject();
@@ -354,6 +355,7 @@ public class ToscaService {
 				template.put("properties", mergedJSON);
 
 				data.put("shape", shape);
+				data.put("image", image);
 				data.put("color", color);
 				data.put("props", template);
 				dataType.put("props", template);

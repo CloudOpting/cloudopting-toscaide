@@ -1,4 +1,4 @@
-<NodeType name="DockerContainer" shape="pentagon" color="#118844">
+<NodeType name="DockerContainer" shape="pentagon" color="#ffffff" image="docker.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="DockerContainerProperties"
 		type="tDockerContainerProperties" />

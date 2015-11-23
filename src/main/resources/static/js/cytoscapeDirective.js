@@ -68,12 +68,14 @@ console.debug(scope.elements.nodes);
 					var Oshape = scope.cyTemplates[Otype].shape;
 					var Oprops = scope.cyTemplates[Otype].props;
 					var typeColor = scope.cyTemplates[Otype].color;
+					var image = 'type/'+scope.cyTemplates[Otype].image;
                     // build the object, add or change properties as you need - just have a name and id
                     var elementObj = {
                         group:Otype,'data':{
                             id:Oid,
                             name:Oname,
                             typeColor:typeColor,
+                            image:image,
                             typeShape:Oshape,  //was Otype
 							properties:Oprops,
                             type:Otype
@@ -102,11 +104,13 @@ console.debug(scope.elements.nodes);
                             'width': '120',
                             'height': '90',
                             'background-color': 'data(typeColor)',
+                            'background-image': 'data(image)',
+                            'background-fit': 'contain',
                             'content': 'data(name)',
                             'text-valign': 'center',
                             'color': 'white',
                             'text-outline-width': 2,
-                            'text-outline-color': 'data(typeColor)'
+                            'text-outline-color': '#000000'
                         })
                         .selector('edge')
                         .css({

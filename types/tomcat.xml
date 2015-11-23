@@ -1,4 +1,4 @@
-<NodeType name="Tomcat" shape="ellipse" color="#332299">
+<NodeType name="Tomcat" shape="ellipse" color="#ffffff" image="tomcat.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="TomcatProperties"
 		type="tTomcatProperties" />
