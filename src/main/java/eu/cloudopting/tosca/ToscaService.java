@@ -517,6 +517,14 @@ log.debug(this.nodeTypePropList.toString());
 			log.debug("Property:"+name);
 			
 
+			String defValue = null;
+			String description = null;
+			if (nodes.item(i).getAttributes().getNamedItem("default") != null){
+				defValue = nodes.item(i).getAttributes().getNamedItem("default").getNodeValue();
+			}
+			if (nodes.item(i).getAttributes().getNamedItem("description") != null){
+				description = nodes.item(i).getAttributes().getNamedItem("description").getNodeValue();
+			}
 			String title = nodes.item(i).getAttributes().getNamedItem("title").getNodeValue();
 			log.debug("title:"+title);
 			String formtype = nodes.item(i).getAttributes().getNamedItem("formtype").getNodeValue();
@@ -563,6 +571,12 @@ log.debug(this.nodeTypePropList.toString());
 					}
 					form.put("title", title);
 					form.put("type", formtype);
+					if(description != null){
+						form.put("description", description);
+					}
+					if(defValue != null){
+						form.put("default", defValue);
+					}
 					props.put(name, form);
 					switch (propertyType) {
 					case "capability":

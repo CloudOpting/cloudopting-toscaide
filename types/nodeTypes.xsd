@@ -225,6 +225,7 @@
 						<xs:extension base="xs:string">
 							<xs:attribute name="title" fixed="Server name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="description" fixed="the URL of the website"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
@@ -235,6 +236,7 @@
 						<xs:extension base="xs:string">
 							<xs:attribute name="title" fixed="VHost name (*)"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="default" fixed="*"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
