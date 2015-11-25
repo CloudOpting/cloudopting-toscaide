@@ -51,7 +51,7 @@
 						<xs:extension base="tcpu">
 							<xs:attribute name="title" fixed="CPU"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
-							<xs:attribute name="enum" fixed="['1','2','4']"></xs:attribute>
+							<xs:attribute name="enum" fixed="['1','2','4','6','8']"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
@@ -83,6 +83,42 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="VMhostProperties" type="tVMhostProperties" />
+	<xs:complexType name="tDockerVolumes">
+		<xs:sequence>
+			<xs:element name="host">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Path of the host"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="container">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="title" fixed="Path in the container"></xs:attribute>
+							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="readonly">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:boolean">
+							<xs:attribute name="title" fixed="Is mounted read-only?"></xs:attribute>
+							<xs:attribute name="formtype" fixed="boolean"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="title" fixed="Volume"></xs:attribute>
+		<xs:attribute name="formtype" fixed="array"></xs:attribute>
+	</xs:complexType>
 	<xs:complexType name="tDockerContainerProperties">
 		<xs:sequence>
 			<xs:element name="image">
@@ -115,6 +151,7 @@
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="volumes" type="tDockerVolumes"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="DockerContainerProperties" type="tDockerContainerProperties" />
