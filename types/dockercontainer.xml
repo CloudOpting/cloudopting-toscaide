@@ -14,7 +14,7 @@
 <NodeTypeImplementation nodeType="DockerContainer"
 	name="DockerContainerImpl">
 	<DeploymentArtifacts>
-		<DeploymentArtifact name="ClearoApacheDC.dockerfile"
+		<DeploymentArtifact name="DockerContainer.dockerfile"
 			artifactType="DockerfileTemplate" artifactRef="DockerContainerDT">
 		</DeploymentArtifact>
 		<DeploymentArtifact name="sd" artifactType="PuppetTemplate"
