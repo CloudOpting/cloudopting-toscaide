@@ -377,6 +377,8 @@ console.debug($scope.mapData[$scope.workingNode]);
 							method:"POST",
 							headers:{"Content-Type": "text/plain",}
 							}).success(function(data, status){
+								$scope.mapData = [];
+								$scope.edgeData = [];
 							console.debug(data);
 							console.debug(status);
 //							$scope.mapData = data.nodes;
