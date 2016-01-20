@@ -228,6 +228,7 @@ public class ToscaService {
 		File[] listOfFiles = folder.listFiles(filter);
 
 		String fullXml = "<Nodes>";
+if(listOfFiles!=null){
 		for (int i = 0; i < listOfFiles.length; i++) {
 			File file = listOfFiles[i];
 			String content = null;
@@ -241,6 +242,7 @@ public class ToscaService {
 			fullXml = fullXml.concat(content);
 			// do something with the file
 		}
+}
 		fullXml = fullXml.concat("</Nodes>");
 		log.debug("xml: " + fullXml);
 		/*
