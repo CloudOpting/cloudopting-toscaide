@@ -1,8 +1,0 @@
-manager:
-#  image:  tomcat:7.0.63-jre8
-  build: .
-  restart: always
-  hostname: toscaide 
-  container_name: toscaide 
-  ports:
-    - "8085:8080"
