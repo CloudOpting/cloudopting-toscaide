@@ -271,7 +271,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Server name"></xs:attribute>
+							<xs:attribute name="title" fixed="Web server name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 							<xs:attribute name="description" fixed="the URL of the website"></xs:attribute>
 						</xs:extension>
@@ -404,7 +404,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB user"></xs:attribute>
+							<xs:attribute name="title" fixed="Wordpress DB user"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -414,7 +414,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="Wordpress DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -424,7 +424,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB host"></xs:attribute>
+							<xs:attribute name="title" fixed="Wordpress DB host"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -434,7 +434,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB name"></xs:attribute>
+							<xs:attribute name="title" fixed="Wordpress DB name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -459,7 +459,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Root DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="PostgreSQL Root DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -524,7 +524,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB name"></xs:attribute>
+							<xs:attribute name="title" fixed="PostgreSQL DB name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -534,7 +534,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB user"></xs:attribute>
+							<xs:attribute name="title" fixed="PostgreSQL DB user"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -544,7 +544,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="PostgreSQL DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -565,7 +565,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Grants"></xs:attribute>
+							<xs:attribute name="title" fixed="PostgreSQL DB Grants"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -620,7 +620,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Root DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL Root DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -656,7 +656,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -666,7 +666,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Host"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL Host"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -676,7 +676,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB user"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL DB user"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -686,7 +686,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB name"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL DB name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -706,7 +706,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Grant"></xs:attribute>
+							<xs:attribute name="title" fixed="MySQL Grant"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -731,7 +731,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Base folder"></xs:attribute>
+							<xs:attribute name="title" fixed="Tomcat Base folder"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -741,7 +741,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Home folder"></xs:attribute>
+							<xs:attribute name="title" fixed="Tomcat Home folder"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -841,7 +841,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Host of the DB"></xs:attribute>
+							<xs:attribute name="title" fixed="Host of the Liferay DB"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -851,7 +851,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Db user"></xs:attribute>
+							<xs:attribute name="title" fixed="Liferay Db user"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -861,7 +861,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB name"></xs:attribute>
+							<xs:attribute name="title" fixed="Liferay DB name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -871,7 +871,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="DB password"></xs:attribute>
+							<xs:attribute name="title" fixed="Liferay DB password"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
@@ -1141,7 +1141,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
-							<xs:attribute name="title" fixed="Job name"></xs:attribute>
+							<xs:attribute name="title" fixed="Cron Job name"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
