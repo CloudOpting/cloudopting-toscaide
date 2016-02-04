@@ -963,6 +963,10 @@ if(listOfFiles!=null){
 			log.debug(propVal);
 			String filename = propVal.substring(10, propVal.length() - 2);
 			return this.definitionTemplate.createProcessingInstruction("servPath", filename);
+		} else if (propVal.startsWith("%%SERVURL")) {
+			log.debug(propVal);
+			String filename = propVal.substring(10, propVal.length() - 2);
+			return this.definitionTemplate.createProcessingInstruction("servUrl", filename);
 		} else {
 			return this.definitionTemplate.createTextNode(propVal);
 		}

@@ -1,0 +1,35 @@
+<NodeType name="Remotefile" shape="ellipse" color="#332299" image="docker.png">
+	<DerivedFrom typeRef="root" />
+	<PropertiesDefinition element="RemotefileProperties"
+		type="tRemotefileProperties" />
+	<Interfaces>
+		<Interface name="Install">
+			<Operation name="compilePuppetTemplateHierarchy"></Operation>
+		</Interface>
+	</Interfaces>
+</NodeType>
+<NodeTypeImplementation nodeType="Remotefile"
+	name="RemotefileImpl">
+	<DeploymentArtifacts>
+		<DeploymentArtifact name="RemotefilePT.ftl"
+			artifactType="PuppetTemplate" artifactRef="RemotefilePT">
+		</DeploymentArtifact>
+		<DeploymentArtifact artifactType="PuppetModule"
+			artifactRef="RemotefilePM">
+		</DeploymentArtifact>
+	</DeploymentArtifacts>
+</NodeTypeImplementation>
+<ArtifactTemplate type="PuppetTemplate" id="RemotefilePT">
+	<ArtifactReferences>
+		<ArtifactReference reference="Templates/RemotefilePT.ftl"></ArtifactReference>
+	</ArtifactReferences>
+</ArtifactTemplate>
+<ArtifactTemplate type="PuppetModule" id="RemotefilePM">
+	<Properties
+		xmlns:co="http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes">
+		<co:PuppetModuleProperties>
+			<co:module>maestrodev-wget</co:module>
+			<co:git>https://github.com/maestrodev/puppet-wget</co:git>
+		</co:PuppetModuleProperties>
+	</Properties>
+</ArtifactTemplate>
