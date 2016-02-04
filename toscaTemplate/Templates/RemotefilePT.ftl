@@ -6,7 +6,7 @@ wget::fetch {<#if source?has_content>'${source}':</#if>
 <#if co_jack_password?has_content>password => '${co_jack_password}',</#if>
 <#if require?has_content>require => ${require},</#if>
 <#if before?has_content>before => ${before},</#if>
-}<#if unzip>->
+}<#if (unzip?has_content) && unzip == "true">->
 archive::extract{<#if source?has_content>'${archive}':</#if>
 <#if target?has_content>target => '${target}',</#if>
 <#if destination?has_content>src_target => '${destination}',</#if>
