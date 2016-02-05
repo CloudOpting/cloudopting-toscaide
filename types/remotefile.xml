@@ -1,4 +1,4 @@
-<NodeType name="Remotefile" shape="ellipse" color="#332299" image="docker.png">
+<NodeType name="Remotefile" shape="ellipse" color="#332299" image="remotefile.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="RemotefileProperties"
 		type="tRemotefileProperties" />

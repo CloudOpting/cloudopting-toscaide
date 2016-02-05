@@ -1,4 +1,4 @@
-<NodeType name="ApacheModule" shape="ellipse" color="#332299" image="docker.png">
+<NodeType name="ApacheModule" shape="ellipse" color="#332299" image="apache_mod.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="ApacheModuleProperties"
 		type="tApacheModuleProperties" />
