@@ -1,4 +1,4 @@
-<NodeType name="Liferay" shape="ellipse" color="#332255" image="liferay.png">
+<NodeType name="Liferay" shape="ellipse" color="#ffffff" image="liferay.png">
 	<DerivedFrom typeRef="root" />
 	<PropertiesDefinition element="LiferayProperties"
 		type="tLiferayProperties" />
