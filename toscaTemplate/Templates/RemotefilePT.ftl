@@ -1,6 +1,5 @@
 package{"wget":
-}
-
+}->
 exec {<#if source?has_content>'${source}':</#if>
 command => "wget --verbose --user=<#if co_jack_user?has_content>${co_jack_user}</#if> --password=<#if co_jack_password?has_content>${co_jack_password}</#if> --output-document=\"<#if destination?has_content>${destination}</#if>/<#if archive?has_content>${archive}</#if>.<#if extension?has_content>${extension}</#if>\" \"<#if source?has_content>${source}</#if>\"",
 path => '/bin:/usr/bin:/usr/sbin',

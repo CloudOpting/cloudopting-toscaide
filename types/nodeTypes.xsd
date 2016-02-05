@@ -23,6 +23,14 @@
 			<xs:enumeration value="mongodb" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="tziptype">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="zip" />
+			<xs:enumeration value="tar.gz" />
+			<xs:enumeration value="tgz" />
+			<xs:enumeration value="tgz2" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="tcpu">
 		<xs:restriction base="xs:int">
 			<xs:enumeration value="1" />
@@ -1316,9 +1324,11 @@
 			<xs:element name="extension">
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="xs:string">
+						<xs:extension base="tziptype">
 							<xs:attribute name="title" fixed="Extension of the archive"></xs:attribute>
 							<xs:attribute name="formtype" fixed="string"></xs:attribute>
+							<xs:attribute name="enum"
+								fixed="['zip','tar.gz','tgz','tgz2']"></xs:attribute>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>

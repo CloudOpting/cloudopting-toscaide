@@ -28,8 +28,8 @@
 	<Properties
 		xmlns:co="http://docs.oasis-open.org/tosca/ns/2011/12/CloudOptingTypes">
 		<co:PuppetModuleProperties>
-			<co:module>maestrodev-wget</co:module>
-			<co:git>https://github.com/maestrodev/puppet-wget</co:git>
+			<co:module>archive</co:module>
+			<co:git>https://github.com/camptocamp/puppet-archive.git</co:git>
 		</co:PuppetModuleProperties>
 	</Properties>
 </ArtifactTemplate>
